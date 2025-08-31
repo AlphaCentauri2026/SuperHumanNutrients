@@ -20,6 +20,14 @@ export default function LoginPage() {
   } = useAuth();
   const router = useRouter();
 
+  // Debug logging
+  console.log('LoginPage render:', {
+    user: !!user,
+    authLoading,
+    redirectInProgress,
+    resetAuthState: !!resetAuthState,
+  });
+
   const handleGoogleSignIn = async () => {
     // Don't start a new sign-in if one is already in progress
     if (redirectInProgress) {
@@ -120,6 +128,22 @@ export default function LoginPage() {
               className="w-full text-gray-600 border-gray-300 hover:bg-gray-50"
             >
               Reset Authentication State
+            </Button>
+
+            {/* Force Reset Button */}
+            <Button
+              onClick={() => {
+                console.log('Force reset clicked');
+                // Force clear all auth state
+                localStorage.clear();
+                sessionStorage.clear();
+                // Reload the page
+                window.location.reload();
+              }}
+              variant="outline"
+              className="w-full text-red-600 border-red-300 hover:bg-red-50"
+            >
+              Force Reset & Reload Page
             </Button>
 
             {/* Error Display */}
