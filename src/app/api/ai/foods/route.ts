@@ -3,6 +3,14 @@ import { foodGroupOperations } from '@/lib/database';
 
 export async function GET(request: NextRequest) {
   try {
+    // Check if we're in build mode (no environment variables)
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+      return NextResponse.json(
+        { success: false, error: 'Database not configured for build time' },
+        { status: 503 }
+      );
+    }
+
     // Get all food groups from the database
     const foodGroups = await foodGroupOperations.getAll();
 

@@ -48,6 +48,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }, 10000); // 10 second timeout
 
+    if (!auth) {
+      console.log(
+        '[AuthContext] Auth not initialized, skipping auth state listener'
+      );
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, user => {
       console.log(
         '[AuthContext] Auth state changed:',
@@ -65,6 +73,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isRedirectHandled = true;
 
       try {
+        if (!auth) {
+          console.log(
+            '[AuthContext] Auth not initialized, skipping redirect result'
+          );
+          return;
+        }
+
         console.log('[AuthContext] Handling redirect result...');
         const result = await getRedirectResult(auth);
         if (result && result.user) {
@@ -76,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error('[AuthContext] Redirect result error:', error);
         // Fallback: try to get current user from auth
-        if (auth.currentUser) {
+        if (auth && auth.currentUser) {
           console.log(
             '[AuthContext] Fallback: using auth.currentUser:',
             auth.currentUser
@@ -100,6 +115,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGoogle = async () => {
+    // Check if auth is initialized
+    if (!auth || !googleProvider) {
+      console.log('[AuthContext] Auth or Google provider not initialized');
+      throw new Error('Authentication not available');
+    }
+
     // Prevent multiple redirects
     if (redirectInProgress) {
       console.log(
@@ -136,7 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         );
         setRedirectInProgress(true);
         const result = await import('firebase/auth').then(mod =>
-          mod.signInWithPopup(auth, googleProvider)
+          mod.signInWithPopup(auth!, googleProvider!)
         );
         setUser(result.user);
         setRedirectInProgress(false);
@@ -155,6 +176,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    if (!auth) {
+      console.log('[AuthContext] Auth not initialized, cannot logout');
+      return;
+    }
+
     try {
       await signOut(auth);
     } catch (error) {

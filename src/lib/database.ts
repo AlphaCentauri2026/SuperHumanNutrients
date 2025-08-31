@@ -107,6 +107,18 @@ export interface NutritionGoal {
 }
 
 // ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+// Check if database is available
+const checkDb = () => {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
+  return db;
+};
+
+// ============================================================================
 // FOOD GROUP OPERATIONS
 // ============================================================================
 
@@ -115,7 +127,8 @@ export const foodGroupOperations = {
   async create(
     foodGroup: Omit<FoodGroup, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
-    const docRef = await addDoc(collection(db, 'foodGroups'), {
+    const database = checkDb();
+    const docRef = await addDoc(collection(database, 'foodGroups'), {
       ...foodGroup,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -125,7 +138,8 @@ export const foodGroupOperations = {
 
   // Get all food groups
   async getAll(): Promise<FoodGroup[]> {
-    const querySnapshot = await getDocs(collection(db, 'foodGroups'));
+    const database = checkDb();
+    const querySnapshot = await getDocs(collection(database, 'foodGroups'));
     return querySnapshot.docs.map(
       doc =>
         ({
@@ -137,8 +151,9 @@ export const foodGroupOperations = {
 
   // Get food groups by category
   async getByCategory(category: FoodGroup['category']): Promise<FoodGroup[]> {
+    const database = checkDb();
     const q = query(
-      collection(db, 'foodGroups'),
+      collection(database, 'foodGroups'),
       where('category', '==', category),
       where('isActive', '==', true),
       orderBy('name')
@@ -155,7 +170,8 @@ export const foodGroupOperations = {
 
   // Get food group by ID
   async getById(id: string): Promise<FoodGroup | null> {
-    const docRef = doc(db, 'foodGroups', id);
+    const database = checkDb();
+    const docRef = doc(database, 'foodGroups', id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() } as FoodGroup;
@@ -165,7 +181,8 @@ export const foodGroupOperations = {
 
   // Update food group
   async update(id: string, updates: Partial<FoodGroup>): Promise<void> {
-    const docRef = doc(db, 'foodGroups', id);
+    const database = checkDb();
+    const docRef = doc(database, 'foodGroups', id);
     await updateDoc(docRef, {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -202,7 +219,8 @@ export const userPreferencesOperations = {
     userId: string,
     preferences: Partial<UserPreferences>
   ): Promise<void> {
-    const docRef = doc(db, 'userPreferences', userId);
+    const database = checkDb();
+    const docRef = doc(database, 'userPreferences', userId);
     await setDoc(
       docRef,
       {
@@ -216,7 +234,8 @@ export const userPreferencesOperations = {
 
   // Get user preferences
   async get(userId: string): Promise<UserPreferences | null> {
-    const docRef = doc(db, 'userPreferences', userId);
+    const database = checkDb();
+    const docRef = doc(database, 'userPreferences', userId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return docSnap.data() as UserPreferences;
@@ -229,7 +248,8 @@ export const userPreferencesOperations = {
     userId: string,
     updates: Partial<UserPreferences>
   ): Promise<void> {
-    const docRef = doc(db, 'userPreferences', userId);
+    const database = checkDb();
+    const docRef = doc(database, 'userPreferences', userId);
     await updateDoc(docRef, {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -246,7 +266,8 @@ export const savedCombinationsOperations = {
   async save(
     combination: Omit<SavedCombination, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
-    const docRef = await addDoc(collection(db, 'savedCombinations'), {
+    const database = checkDb();
+    const docRef = await addDoc(collection(database, 'savedCombinations'), {
       ...combination,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -257,8 +278,9 @@ export const savedCombinationsOperations = {
   // Get combinations by user ID
   async getByUserId(userId: string): Promise<SavedCombination[]> {
     try {
+      const database = checkDb();
       const q = query(
-        collection(db, 'savedCombinations'),
+        collection(database, 'savedCombinations'),
         where('userId', '==', userId)
         // Removed orderBy to avoid composite index requirement
       );
@@ -277,8 +299,9 @@ export const savedCombinationsOperations = {
   // Get favorite combinations for a user
   async getFavorites(userId: string): Promise<SavedCombination[]> {
     try {
+      const database = checkDb();
       const q = query(
-        collection(db, 'savedCombinations'),
+        collection(database, 'savedCombinations'),
         where('userId', '==', userId),
         where('isFavorite', '==', true)
         // Removed orderBy to avoid composite index requirement
@@ -297,7 +320,8 @@ export const savedCombinationsOperations = {
 
   // Update combination
   async update(id: string, updates: Partial<SavedCombination>): Promise<void> {
-    const docRef = doc(db, 'savedCombinations', id);
+    const database = checkDb();
+    const docRef = doc(database, 'savedCombinations', id);
     await updateDoc(docRef, {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -311,7 +335,8 @@ export const savedCombinationsOperations = {
 
   // Delete combination
   async delete(id: string): Promise<void> {
-    const docRef = doc(db, 'savedCombinations', id);
+    const database = checkDb();
+    const docRef = doc(database, 'savedCombinations', id);
     await deleteDoc(docRef);
   },
 };
@@ -325,7 +350,8 @@ export const nutritionGoalsOperations = {
   async upsert(
     goal: Omit<NutritionGoal, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
-    const docRef = doc(db, 'nutritionGoals', goal.userId);
+    const database = checkDb();
+    const docRef = doc(database, 'nutritionGoals', goal.userId);
     await setDoc(
       docRef,
       {
@@ -339,8 +365,9 @@ export const nutritionGoalsOperations = {
 
   // Get user's nutrition goals
   async getByUserId(userId: string): Promise<NutritionGoal[]> {
+    const database = checkDb();
     const q = query(
-      collection(db, 'nutritionGoals'),
+      collection(database, 'nutritionGoals'),
       where('userId', '==', userId),
       where('isActive', '==', true),
       orderBy('createdAt', 'desc')
@@ -357,7 +384,8 @@ export const nutritionGoalsOperations = {
 
   // Update nutrition goal
   async update(userId: string, updates: Partial<NutritionGoal>): Promise<void> {
-    const docRef = doc(db, 'nutritionGoals', userId);
+    const database = checkDb();
+    const docRef = doc(database, 'nutritionGoals', userId);
     await updateDoc(docRef, {
       ...updates,
       updatedAt: serverTimestamp(),

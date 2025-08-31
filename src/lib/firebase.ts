@@ -2,31 +2,47 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebasestorage.app`,
-  messagingSenderId: '629111717812',
-  appId: '1:629111717812:web:b8e5c32722c6f4431abce1',
-  measurementId: 'G-DCKKCKT71N',
-};
+// Only initialize Firebase if we're in the browser or if environment variables are available
+let app: ReturnType<typeof initializeApp> | null = null;
+let auth: ReturnType<typeof getAuth> | null = null;
+let db: ReturnType<typeof getFirestore> | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+if (
+  typeof window !== 'undefined' ||
+  (process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN)
+) {
+  const firebaseConfig = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebasestorage.app`,
+    messagingSenderId: '629111717812',
+    appId: '1:629111717812:web:b8e5c32722c6f4431abce1',
+    measurementId: 'G-DCKKCKT71N',
+  };
 
-// Initialize Firebase services
-export const auth = getAuth(app);
-auth.useDeviceLanguage();
+  // Initialize Firebase
+  app = initializeApp(firebaseConfig);
+}
 
-export const db = getFirestore(app);
-export const googleProvider = new GoogleAuthProvider();
+// Initialize Firebase services only if app is available
+if (app) {
+  auth = getAuth(app);
+  auth.useDeviceLanguage();
 
-// Configure Google Auth Provider
-googleProvider.setCustomParameters({
-  prompt: 'select_account',
-  // Ensure we're using the correct OAuth flow
-  access_type: 'offline',
-});
+  db = getFirestore(app);
+  googleProvider = new GoogleAuthProvider();
+
+  // Configure Google Auth Provider
+  googleProvider.setCustomParameters({
+    prompt: 'select_account',
+    // Ensure we're using the correct OAuth flow
+    access_type: 'offline',
+  });
+}
+
+export { auth, db, googleProvider };
 
 export default app;
