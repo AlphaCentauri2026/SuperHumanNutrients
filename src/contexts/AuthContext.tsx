@@ -211,6 +211,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
     setRedirectInProgress(false);
     setLastSignInAttempt(null);
+
+    // Also expose globally for debugging
+    if (typeof window !== 'undefined') {
+      window.resetAuth = resetAuthState;
+    }
   };
 
   const value = {

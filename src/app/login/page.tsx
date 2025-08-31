@@ -16,6 +16,7 @@ export default function LoginPage() {
     user,
     loading: authLoading,
     redirectInProgress,
+    resetAuthState,
   } = useAuth();
   const router = useRouter();
 
@@ -110,6 +111,15 @@ export default function LoginPage() {
                   Continue with Google
                 </>
               )}
+            </Button>
+
+            {/* Reset Authentication Button */}
+            <Button
+              onClick={resetAuthState}
+              variant="outline"
+              className="w-full text-gray-600 border-gray-300 hover:bg-gray-50"
+            >
+              Reset Authentication State
             </Button>
 
             {/* Error Display */}
