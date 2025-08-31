@@ -14,10 +14,16 @@ if (
     process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN)
 ) {
   const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebasestorage.app`,
+    apiKey:
+      process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+      'AIzaSyD6Ru6-S4IJShURCOOG5rF5bJlbuAPVKj4',
+    authDomain:
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+      'superhuman-nutrition-c5176.firebaseapp.com',
+    projectId:
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+      'superhuman-nutrition-c5176',
+    storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'superhuman-nutrition-c5176'}.firebasestorage.app`,
     messagingSenderId: '629111717812',
     appId: '1:629111717812:web:b8e5c32722c6f4431abce1',
     measurementId: 'G-DCKKCKT71N',
