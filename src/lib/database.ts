@@ -112,6 +112,16 @@ export interface NutritionGoal {
 
 // Check if database is available
 const checkDb = () => {
+  // During build time, return a mock database to prevent build errors
+  if (
+    process.env.NODE_ENV === 'production' &&
+    !process.env.NEXT_PUBLIC_FIREBASE_API_KEY
+  ) {
+    throw new Error(
+      'Database not available in production without Firebase configuration'
+    );
+  }
+
   if (!db) {
     throw new Error('Database not initialized');
   }

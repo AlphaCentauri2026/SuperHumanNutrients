@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { foodGroupOperations } from '@/lib/database';
 import { FoodGroup } from '@/lib/database';
 
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();

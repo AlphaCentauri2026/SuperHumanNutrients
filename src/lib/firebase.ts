@@ -8,11 +8,14 @@ let auth: ReturnType<typeof getAuth> | null = null;
 let db: ReturnType<typeof getFirestore> | null = null;
 let googleProvider: GoogleAuthProvider | null = null;
 
-if (
+// Check if we're in a build environment or if Firebase is properly configured
+const shouldInitializeFirebase =
   typeof window !== 'undefined' ||
   (process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN)
-) {
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID);
+
+if (shouldInitializeFirebase) {
   const firebaseConfig = {
     apiKey:
       process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
