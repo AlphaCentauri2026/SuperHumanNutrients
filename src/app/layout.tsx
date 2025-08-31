@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: 'Superhuman Nutrition - AI-Powered Meal Planning',
   description:
     'Generate optimal meal plans combining fruits, vegetables, and grains using AI. Personalized nutrition planning for a healthier lifestyle.',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({
