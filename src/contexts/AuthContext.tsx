@@ -16,6 +16,7 @@ interface AuthContextType {
   redirectInProgress: boolean;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  resetAuthState: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,6 +33,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [redirectInProgress, setRedirectInProgress] = useState(false);
+  const [lastSignInAttempt, setLastSignInAttempt] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     // This flag helps prevent redirect loops
@@ -121,13 +125,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error('Authentication not available');
     }
 
-    // Prevent multiple redirects
+    // Prevent multiple redirects and add cooldown
     if (redirectInProgress) {
       console.log(
         'Redirect already in progress, ignoring additional sign-in attempt'
       );
       return;
     }
+
+    // Add a cooldown to prevent rapid-fire sign-in attempts
+    const now = Date.now();
+    if (lastSignInAttempt && now - lastSignInAttempt < 5000) {
+      console.log('[AuthContext] Sign-in attempt too soon, please wait');
+      return;
+    }
+    setLastSignInAttempt(now);
 
     try {
       // Check if we're in a mobile browser or on a local network IP
@@ -183,10 +195,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await signOut(auth);
+      setUser(null);
+      setRedirectInProgress(false);
+      setLastSignInAttempt(null);
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
     }
+  };
+
+  // Manual reset function to break out of sign-in loops
+  const resetAuthState = () => {
+    console.log('[AuthContext] Manually resetting auth state');
+    setUser(null);
+    setLoading(false);
+    setRedirectInProgress(false);
+    setLastSignInAttempt(null);
   };
 
   const value = {
@@ -195,6 +219,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     redirectInProgress,
     signInWithGoogle,
     logout,
+    resetAuthState,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
