@@ -1,0 +1,167 @@
+name,category,description,caloriesPer100g,proteinPer100g,carbsPer100g,fatPer100g,fiberPer100g,nutrients,benefits,subcategory,seasonality,glycemicIndex
+Apple,fruits,"Sweet, crisp fruit rich in fiber and antioxidants",52,0.3,14,0.2,2.4,"Vitamin C;Potassium;Fiber","Heart health;Digestive health;Immune support",pome fruits,fall,36
+Banana,fruits,"Yellow fruit high in potassium and natural sugars",89,1.1,23,0.3,2.6,"Potassium;Vitamin B6;Fiber","Energy boost;Heart health;Muscle function",tropical fruits,year-round,51
+Orange,fruits,"Citrus fruit packed with vitamin C and fiber",47,0.9,12,0.1,2.4,"Vitamin C;Folate;Potassium","Immune support;Skin health;Heart health",citrus fruits,winter,45
+Strawberry,fruits,"Sweet berries rich in antioxidants and vitamin C",32,0.7,8,0.3,2.0,"Vitamin C;Manganese;Folate","Anti-aging;Heart health;Immune support",berries,spring,40
+Blueberry,fruits,"Small berries with powerful antioxidant properties",57,0.7,14,0.3,2.4,"Vitamin C;Vitamin K;Manganese","Brain health;Anti-inflammatory;Eye health",berries,summer,53
+Mango,fruits,"Tropical fruit rich in vitamins and enzymes",60,0.8,15,0.4,1.6,"Vitamin A;Vitamin C;Folate","Digestive health;Skin health;Immune support",tropical fruits,summer,51
+Pineapple,fruits,"Tropical fruit with digestive enzymes",50,0.5,13,0.1,1.4,"Vitamin C;Manganese;Bromelain","Digestive health;Anti-inflammatory;Immune support",tropical fruits,summer,59
+Grape,fruits,"Small fruits with resveratrol antioxidant",62,0.6,16,0.2,0.9,"Vitamin C;Resveratrol;Potassium","Heart health;Anti-aging;Immune support",berries,fall,53
+Peach,fruits,"Soft stone fruit with beta-carotene",39,0.9,10,0.3,1.5,"Vitamin A;Vitamin C;Potassium","Eye health;Skin health;Digestive health",stone fruits,summer,42
+Pear,fruits,"Sweet fruit with soluble fiber",57,0.4,15,0.1,3.1,"Vitamin C;Copper;Fiber","Digestive health;Heart health;Immune support",pome fruits,fall,38
+Plum,fruits,"Purple stone fruit with anthocyanins",46,0.7,11,0.3,1.4,"Vitamin C;Vitamin K;Potassium","Heart health;Bone health;Digestive health",stone fruits,summer,39
+Cherry,fruits,"Small stone fruits with anti-inflammatory compounds",50,1.1,12,0.3,1.6,"Vitamin C;Anthocyanins;Potassium","Anti-inflammatory;Heart health;Sleep support",stone fruits,summer,22
+Kiwi,fruits,"Fuzzy fruit with exceptional vitamin C content",61,1.1,15,0.5,3.0,"Vitamin C;Vitamin K;Folate","Immune support;Bone health;Digestive health",exotic fruits,fall,52
+Papaya,fruits,"Tropical fruit with digestive enzymes",43,0.5,11,0.3,1.7,"Vitamin A;Vitamin C;Papain","Digestive health;Skin health;Immune support",tropical fruits,summer,59
+Guava,fruits,"Tropical fruit with exceptional vitamin C",68,2.6,14,0.9,5.4,"Vitamin C;Fiber;Lycopene","Immune support;Digestive health;Heart health",tropical fruits,summer,31
+Dragon Fruit,fruits,"Exotic fruit with betalains and fiber",60,1.1,13,0.4,1.1,"Vitamin C;Iron;Betalains","Immune support;Blood health;Digestive health",exotic fruits,summer,48
+Pomegranate,fruits,"Red fruit with powerful antioxidants",83,1.7,19,1.2,4.0,"Vitamin C;Punicalagins;Folate","Heart health;Anti-inflammatory;Blood health",exotic fruits,fall,35
+Coconut,fruits,"Tropical fruit with healthy fats and electrolytes",354,3.3,15,33,9.0,"Manganese;Copper;Medium-chain triglycerides","Energy boost;Heart health;Hydration",tropical fruits,year-round,42
+Avocado,fruits,"Creamy fruit with heart-healthy monounsaturated fats",160,2.0,9,15,6.7,"Vitamin K;Folate;Potassium","Heart health;Bone health;Skin health",tropical fruits,year-round,15
+Apricot,fruits,"Orange stone fruit with beta-carotene",48,1.4,11,0.4,2.0,"Vitamin A;Vitamin C;Potassium","Eye health;Skin health;Heart health",stone fruits,summer,32
+Nectarine,fruits,"Smooth-skinned peach variety",44,1.1,11,0.3,1.7,"Vitamin A;Vitamin C;Potassium","Eye health;Skin health;Digestive health",stone fruits,summer,43
+Fig,fruits,"Sweet fruit with calcium and fiber",74,0.8,19,0.3,2.9,"Calcium;Iron;Fiber","Bone health;Blood health;Digestive health",exotic fruits,fall,61
+Date,fruits,"Sweet dried fruit with fiber and minerals",282,2.5,75,0.4,6.7,"Iron;Potassium;Fiber","Energy boost;Blood health;Digestive health",dried fruits,year-round,42
+Prune,fruits,"Dried plum with digestive benefits",240,2.2,64,0.4,7.1,"Iron;Potassium;Fiber","Digestive health;Blood health;Bone health",dried fruits,year-round,29
+Raisin,fruits,"Dried grapes with concentrated nutrients",299,3.1,79,0.5,3.7,"Iron;Potassium;Fiber","Energy boost;Blood health;Heart health",dried fruits,year-round,64
+Cranberry,fruits,"Tart berries with urinary tract benefits",46,0.4,12,0.1,4.6,"Vitamin C;Proanthocyanidins;Fiber","Urinary health;Anti-inflammatory;Immune support",berries,fall,45
+Raspberry,fruits,"Red berries with ellagic acid",52,1.2,12,0.7,6.5,"Vitamin C;Ellagic acid;Fiber","Anti-inflammatory;Digestive health;Immune support",berries,summer,32
+Blackberry,fruits,"Dark berries with anthocyanins",43,1.4,10,0.5,5.3,"Vitamin C;Anthocyanins;Fiber","Anti-inflammatory;Heart health;Immune support",berries,summer,25
+Goji Berry,fruits,"Superfood berries with antioxidants",349,14,77,0.4,13.0,"Vitamin C;Zeaxanthin;Iron","Eye health;Immune support;Anti-aging",superfoods,year-round,29
+Acai Berry,fruits,"Amazonian superfruit with antioxidants",70,1.0,4.0,5.0,2.0,"Anthocyanins;Omega-3;Antioxidants","Anti-aging;Heart health;Brain function",superfoods,year-round,15
+Mulberry,fruits,"Sweet berries with resveratrol",43,1.4,10,0.4,1.7,"Vitamin C;Resveratrol;Iron","Heart health;Anti-aging;Blood health",berries,summer,25
+Elderberry,fruits,"Dark berries with immune support",73,0.7,18,0.5,7.0,"Vitamin C;Anthocyanins;Fiber","Immune support;Anti-inflammatory;Heart health",berries,fall,25
+Lingonberry,fruits,"Tart berries with antioxidants",39,0.2,8,0.3,2.5,"Vitamin C;Anthocyanins;Fiber","Anti-inflammatory;Urinary health;Immune support",berries,fall,15
+Sea Buckthorn,fruits,"Orange berries with omega-7",82,1.2,6,3.4,0.8,"Omega-7;Vitamin C;Carotenoids","Skin health;Immune support;Heart health",superfoods,fall,15
+Spinach,vegetables,"Dark leafy green packed with iron and vitamins",23,2.9,3.6,0.4,2.2,"Iron;Vitamin K;Folate","Bone health;Blood health;Eye health",leafy greens,spring,15
+Kale,vegetables,"Nutrient-dense leafy green with anti-inflammatory properties",49,4.3,9,0.9,3.6,"Vitamin K;Vitamin C;Calcium","Anti-inflammatory;Bone health;Heart health",leafy greens,fall,15
+Broccoli,vegetables,"Cruciferous vegetable with cancer-fighting compounds",34,2.8,7,0.4,2.6,"Vitamin C;Vitamin K;Folate","Cancer prevention;Immune support;Bone health",cruciferous,fall,15
+Carrot,vegetables,"Orange root vegetable rich in beta-carotene",41,0.9,10,0.2,2.8,"Beta-carotene;Vitamin K;Fiber","Eye health;Skin health;Digestive health",root vegetables,fall,39
+Bell Pepper,vegetables,"Colorful peppers high in vitamin C",31,1.0,7,0.3,2.1,"Vitamin C;Vitamin A;Potassium","Immune support;Eye health;Heart health",nightshades,summer,15
+Tomato,vegetables,"Red fruit-vegetable with lycopene antioxidant",18,0.9,3.9,0.2,1.2,"Lycopene;Vitamin C;Potassium","Heart health;Cancer prevention;Skin health",nightshades,summer,15
+Sweet Potato,vegetables,"Orange root vegetable with complex carbs",86,1.6,20,0.1,3.0,"Beta-carotene;Vitamin C;Potassium","Eye health;Immune support;Heart health",root vegetables,fall,44
+Cauliflower,vegetables,"White cruciferous vegetable with sulforaphane",25,1.9,5,0.3,2.0,"Vitamin C;Vitamin K;Choline","Cancer prevention;Brain health;Bone health",cruciferous,fall,15
+Brussels Sprouts,vegetables,"Mini cabbage with cancer-fighting compounds",43,3.4,9,0.3,3.8,"Vitamin C;Vitamin K;Folate","Cancer prevention;Bone health;Immune support",cruciferous,fall,15
+Asparagus,vegetables,"Spring vegetable with inulin prebiotic",20,2.2,3.9,0.1,2.1,"Folate;Vitamin K;Inulin","Digestive health;Bone health;Pregnancy support",spring vegetables,spring,15
+Zucchini,vegetables,"Summer squash with mild flavor and low calories",17,1.2,3.1,0.3,1.0,"Vitamin C;Potassium;Manganese","Hydration;Heart health;Digestive health",summer squash,summer,15
+Eggplant,vegetables,"Purple nightshade with nasunin antioxidant",25,1.0,6,0.2,3.0,"Nasunin;Fiber;Potassium","Brain health;Heart health;Digestive health",nightshades,summer,15
+Cucumber,vegetables,"Hydrating vegetable with silica",16,0.7,3.6,0.1,0.5,"Vitamin K;Silica;Potassium","Hydration;Skin health;Bone health",cucurbits,summer,15
+Onion,vegetables,"Aromatic vegetable with quercetin flavonoid",40,1.1,9,0.1,1.7,"Quercetin;Vitamin C;Sulfur compounds","Heart health;Anti-inflammatory;Immune support",alliums,year-round,15
+Garlic,vegetables,"Pungent vegetable with allicin compound",149,6.4,33,0.5,2.1,"Allicin;Vitamin B6;Manganese","Immune support;Heart health;Anti-inflammatory",alliums,year-round,30
+Ginger,vegetables,"Spicy root with gingerol compound",80,1.8,18,0.8,2.0,"Gingerol;Potassium;Magnesium","Digestive health;Anti-nausea;Anti-inflammatory",root vegetables,year-round,15
+Beetroot,vegetables,"Purple root with betalains and nitrates",43,1.6,10,0.2,2.8,"Betalains;Nitrates;Folate","Blood pressure;Exercise performance;Blood health",root vegetables,fall,64
+Radish,vegetables,"Crisp root with sulfur compounds",16,0.7,3.4,0.1,1.6,"Vitamin C;Sulfur compounds;Potassium","Digestive health;Immune support;Heart health",root vegetables,spring,15
+Turnip,vegetables,"White root with glucosinolates",28,0.9,6,0.1,1.8,"Vitamin C;Glucosinolates;Fiber","Cancer prevention;Immune support;Digestive health",root vegetables,fall,62
+Parsnip,vegetables,"White root with complex carbohydrates",75,1.2,18,0.3,4.9,"Vitamin C;Fiber;Potassium","Digestive health;Heart health;Immune support",root vegetables,fall,52
+Rutabaga,vegetables,"Yellow root with glucosinolates",37,1.1,8,0.2,2.3,"Vitamin C;Glucosinolates;Fiber","Cancer prevention;Immune support;Digestive health",root vegetables,fall,72
+Celeriac,vegetables,"Knobby root with celery flavor",42,1.5,9,0.3,1.8,"Vitamin C;Phosphorus;Fiber","Digestive health;Bone health;Immune support",root vegetables,fall,35
+Jicama,vegetables,"Crisp root with inulin prebiotic",38,0.7,9,0.1,4.9,"Vitamin C;Inulin;Potassium","Digestive health;Immune support;Heart health",root vegetables,fall,17
+Daikon,vegetables,"Japanese radish with enzymes",18,0.6,4,0.1,1.6,"Vitamin C;Enzymes;Potassium","Digestive health;Immune support;Heart health",root vegetables,fall,15
+Bok Choy,vegetables,"Chinese cabbage with glucosinolates",13,1.5,2.2,0.2,1.0,"Vitamin C;Glucosinolates;Calcium","Cancer prevention;Bone health;Immune support",leafy greens,fall,15
+Napa Cabbage,vegetables,"Chinese cabbage with fiber",12,1.2,2.2,0.2,1.2,"Vitamin C;Fiber;Calcium","Digestive health;Bone health;Immune support",leafy greens,fall,15
+Watercress,vegetables,"Peppery green with glucosinolates",11,2.3,1.3,0.1,0.5,"Vitamin C;Glucosinolates;Iron","Cancer prevention;Blood health;Immune support",leafy greens,spring,15
+Arugula,vegetables,"Peppery green with glucosinolates",25,2.6,3.7,0.7,1.6,"Vitamin C;Glucosinolates;Iron","Cancer prevention;Blood health;Immune support",leafy greens,spring,15
+Endive,vegetables,"Bitter green with inulin",17,1.3,3.4,0.2,3.1,"Vitamin K;Inulin;Folate","Digestive health;Bone health;Pregnancy support",leafy greens,fall,15
+Escarole,vegetables,"Bitter green with fiber",17,1.2,3.4,0.2,3.1,"Vitamin K;Fiber;Folate","Digestive health;Bone health;Pregnancy support",leafy greens,fall,15
+Frisée,vegetables,"Curly endive with bitter compounds",17,1.3,3.4,0.2,3.1,"Vitamin K;Fiber;Folate","Digestive health;Bone health;Pregnancy support",leafy greens,fall,15
+Mizuna,vegetables,"Japanese mustard green",22,2.5,3.7,0.3,1.8,"Vitamin C;Glucosinolates;Iron","Cancer prevention;Blood health;Immune support",leafy greens,spring,15
+Tatsoi,vegetables,"Asian green with glucosinolates",18,2.2,2.8,0.3,1.5,"Vitamin C;Glucosinolates;Iron","Cancer prevention;Blood health;Immune support",leafy greens,spring,15
+Quinoa,grains,"Ancient grain with complete protein profile",120,4.4,22,1.9,2.8,"Protein;Iron;Magnesium","Muscle building;Heart health;Gluten-free",pseudocereals,year-round,53
+Brown Rice,grains,"Whole grain rice with fiber and nutrients",111,2.6,23,0.9,1.8,"B vitamins;Magnesium;Selenium","Energy;Heart health;Digestive health",true grains,year-round,55
+Oats,grains,"Heart-healthy whole grain with beta-glucan",389,17,66,7,10.6,"Beta-glucan;Iron;Zinc","Heart health;Cholesterol control;Energy",true grains,year-round,55
+Whole Wheat Bread,grains,"Nutritious bread with fiber and B vitamins",247,13,41,4.2,7.0,"B vitamins;Iron;Fiber","Energy;Digestive health;Heart health",true grains,year-round,69
+Barley,grains,"Ancient grain with soluble fiber",354,12,73,2.3,17.3,"Beta-glucan;Selenium;Manganese","Heart health;Blood sugar control;Digestive health",true grains,fall,28
+Millet,grains,"Gluten-free grain rich in minerals",378,11,73,4.2,8.5,"Magnesium;Phosphorus;Iron","Heart health;Bone health;Gluten-free",true grains,fall,71
+Buckwheat,grains,"Nutrient-rich pseudocereal with rutin",343,13,72,3.4,10.0,"Rutin;Magnesium;Copper","Heart health;Blood circulation;Anti-inflammatory",pseudocereals,fall,54
+Amaranth,grains,"Ancient grain with complete protein",103,4.0,19,1.6,2.1,"Protein;Iron;Calcium","Muscle building;Blood health;Bone health",pseudocereals,fall,35
+Teff,grains,"Tiny Ethiopian grain with high calcium",101,3.9,20,0.7,2.8,"Calcium;Iron;Protein","Bone health;Blood health;Muscle building",true grains,fall,35
+Farro,grains,"Ancient wheat variety with nutty flavor",340,14,70,2.4,10.0,"Protein;Fiber;B vitamins","Muscle building;Digestive health;Energy",true grains,fall,45
+Spelt,grains,"Ancient wheat with easier digestibility",338,15,70,2.4,10.7,"Protein;Fiber;Iron","Muscle building;Digestive health;Blood health",true grains,fall,50
+Sorghum,grains,"Gluten-free grain with antioxidants",329,11,72,3.5,6.7,"Antioxidants;Iron;Protein","Heart health;Blood health;Gluten-free",true grains,fall,62
+Wild Rice,grains,"Aquatic grass with protein and minerals",101,4.0,21,0.3,1.8,"Protein;B vitamins;Manganese","Muscle building;Energy;Brain health",aquatic grains,fall,57
+Kamut,grains,"Ancient wheat with larger kernels",337,15,70,2.2,11.0,"Protein;Selenium;Zinc","Muscle building;Immune support;Antioxidant support",true grains,fall,45
+Einkorn,grains,"Primitive wheat with simple genetics",340,15,70,2.0,10.0,"Protein;Iron;B vitamins","Muscle building;Blood health;Energy",true grains,fall,45
+Freekeh,grains,"Green wheat with smoky flavor",340,15,70,2.0,10.0,"Protein;Fiber;Iron","Muscle building;Digestive health;Blood health",true grains,fall,43
+Bulgur,grains,"Cracked wheat with quick cooking",83,3.1,18,0.2,4.5,"Protein;Fiber;Iron","Muscle building;Digestive health;Blood health",true grains,year-round,48
+Couscous,grains,"Pasta-like grain with quick preparation",112,3.8,23,0.2,2.8,"Protein;Selenium;B vitamins","Muscle building;Immune support;Energy",true grains,year-round,65
+Polenta,grains,"Cornmeal with creamy texture",85,3.0,18,0.4,1.8,"Protein;Fiber;Iron","Muscle building;Digestive health;Blood health",true grains,year-round,68
+Chicken Breast,proteins,"Lean white meat high in protein",165,31,0,3.6,0,"Protein;B vitamins;Selenium","Muscle growth;Weight management;Heart health",poultry,year-round,0
+Salmon,proteins,"Fatty fish rich in omega-3 fatty acids",208,25,0,12,0,"Omega-3;Protein;Vitamin D","Heart health;Brain function;Anti-inflammatory",fish,year-round,0
+Eggs,proteins,"Complete protein source with essential nutrients",155,13,1.1,11,0,"Protein;Choline;Vitamin D","Muscle building;Brain health;Eye health",poultry,year-round,0
+Tofu,proteins,"Plant-based protein from soybeans",76,8,1.9,4.8,0.3,"Protein;Calcium;Isoflavones","Muscle building;Bone health;Heart health",plant proteins,year-round,15
+Tuna,proteins,"Lean fish with high protein and omega-3",144,30,0,1,0,"Protein;Omega-3;Selenium","Muscle building;Heart health;Immune support",fish,year-round,0
+Turkey Breast,proteins,"Lean poultry with tryptophan",135,30,0,1.2,0,"Protein;Tryptophan;B vitamins","Muscle building;Sleep support;Energy",poultry,year-round,0
+Lentils,proteins,"Legume with high protein and fiber",116,9,20,0.4,7.9,"Protein;Iron;Folate","Muscle building;Blood health;Heart health",legumes,year-round,32
+Chickpeas,proteins,"Versatile legume with protein and fiber",164,8.9,27,2.6,7.6,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,year-round,28
+Black Beans,proteins,"Dark legume with antioxidants and protein",132,8.9,23,0.5,8.7,"Protein;Iron;Antioxidants","Muscle building;Blood health;Heart health",legumes,year-round,30
+Edamame,proteins,"Young soybeans with complete protein",121,12,9,5,5.0,"Protein;Iron;Folate","Muscle building;Blood health;Bone health",legumes,summer,15
+Kidney Beans,proteins,"Red legume with protein and fiber",127,8.7,23,0.5,6.4,"Protein;Iron;Folate","Muscle building;Blood health;Heart health",legumes,year-round,29
+Pinto Beans,proteins,"Speckled legume with protein and fiber",143,9.0,26,0.7,9.0,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,year-round,39
+Navy Beans,proteins,"White legume with protein and fiber",139,8.2,26,0.6,10.5,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,year-round,31
+Lima Beans,proteins,"Buttery legume with protein and fiber",115,6.8,21,0.4,7.0,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,year-round,32
+Split Peas,proteins,"Dried peas with protein and fiber",118,8.3,21,0.4,8.3,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,year-round,32
+Fava Beans,proteins,"Broad beans with protein and fiber",88,7.9,17,0.4,5.4,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,spring,79
+Adzuki Beans,proteins,"Small red beans with protein and minerals",128,7.5,25,0.1,7.3,"Protein;Iron;Zinc","Muscle building;Blood health;Immune support",legumes,year-round,35
+Mung Beans,proteins,"Small green beans with protein and fiber",105,7.0,19,0.4,7.6,"Protein;Iron;Folate","Muscle building;Blood health;Digestive health",legumes,year-round,31
+Tempeh,proteins,"Fermented soy with protein and probiotics",192,20,7.6,11,0,"Protein;Probiotics;Isoflavones","Muscle building;Gut health;Heart health",fermented proteins,year-round,15
+Seitan,proteins,"Wheat protein with meat-like texture",370,75,14,1.9,0.6,"Protein;Iron;Selenium","Muscle building;Blood health;Immune support",wheat proteins,year-round,0
+Greek Yogurt,dairy,"Thick, protein-rich yogurt with probiotics",59,10,3.6,0.4,0,"Protein;Calcium;Probiotics","Gut health;Bone strength;Muscle recovery",fermented dairy,year-round,0
+Milk,dairy,"Complete dairy with calcium and vitamin D",42,3.4,5.0,1.0,0,"Calcium;Vitamin D;Protein","Bone health;Muscle function;Heart health",liquid dairy,year-round,31
+Cheese,dairy,"Concentrated dairy with protein and calcium",402,25,1.3,33,0,"Calcium;Protein;Vitamin B12","Bone health;Muscle building;Heart health",aged dairy,year-round,0
+Cottage Cheese,dairy,"Fresh cheese with high protein content",98,11,3.4,4.3,0,"Protein;Calcium;Phosphorus","Muscle building;Bone health;Weight management",fresh dairy,year-round,30
+Kefir,dairy,"Fermented dairy drink with probiotics",64,3.8,4.5,3.3,0,"Protein;Probiotics;Calcium","Gut health;Immune support;Bone health",fermented dairy,year-round,36
+Ricotta Cheese,dairy,"Fresh cheese with whey protein",174,11,3,13,0,"Protein;Calcium;Whey protein","Muscle building;Bone health;Recovery",fresh dairy,year-round,27
+Mozzarella,dairy,"Stretchy cheese with protein and calcium",280,28,2.2,17,0,"Protein;Calcium;Phosphorus","Muscle building;Bone health;Heart health",fresh dairy,year-round,27
+Cheddar Cheese,dairy,"Aged cheese with sharp flavor",403,25,1.3,33,0,"Protein;Calcium;Vitamin B12","Muscle building;Bone health;Nerve function",aged dairy,year-round,0
+Parmesan Cheese,dairy,"Hard aged cheese with umami flavor",431,38,4.1,29,0,"Protein;Calcium;Vitamin B12","Muscle building;Bone health;Flavor enhancement",aged dairy,year-round,0
+Feta Cheese,dairy,"Crumbly cheese with tangy flavor",264,14,4.1,21,0,"Protein;Calcium;Phosphorus","Muscle building;Bone health;Flavor enhancement",fresh dairy,year-round,27
+Goat Cheese,dairy,"Tangy cheese with easier digestibility",364,22,0.7,30,0,"Protein;Calcium;Medium-chain fats","Muscle building;Bone health;Digestive health",fresh dairy,year-round,0
+Blue Cheese,dairy,"Mold-ripened cheese with strong flavor",353,21,2.3,29,0,"Protein;Calcium;Vitamin B12","Muscle building;Bone health;Flavor enhancement",aged dairy,year-round,0
+Brie Cheese,dairy,"Soft cheese with creamy texture",334,21,0.5,28,0,"Protein;Calcium;Vitamin B12","Muscle building;Bone health;Flavor enhancement",soft dairy,year-round,0
+Camembert,dairy,"Soft cheese with bloomy rind",300,20,0.5,24,0,"Protein;Calcium;Vitamin B12","Muscle building;Bone health;Flavor enhancement",soft dairy,year-round,0
+Almonds,nuts,"Nutritious tree nuts rich in healthy fats",579,21,22,50,12.5,"Vitamin E;Magnesium;Healthy fats","Heart health;Brain function;Skin health",tree nuts,year-round,0
+Walnuts,nuts,"Brain-shaped nuts with omega-3 fatty acids",654,15,14,65,6.7,"Omega-3;Protein;Antioxidants","Brain health;Heart health;Anti-inflammatory",tree nuts,fall,0
+Pistachios,nuts,"Green nuts with lutein and antioxidants",560,20,28,45,10.6,"Lutein;Protein;Fiber","Eye health;Heart health;Weight management",tree nuts,fall,15
+Cashews,nuts,"Creamy nuts with heart-healthy fats",553,18,30,44,3.3,"Magnesium;Zinc;Healthy fats","Heart health;Bone health;Immune support",tree nuts,year-round,25
+Pecans,nuts,"Sweet nuts with heart-healthy monounsaturated fats",691,9,14,72,9.6,"Vitamin E;Manganese;Healthy fats","Heart health;Brain function;Antioxidant support",tree nuts,fall,10
+Hazelnuts,nuts,"Nutty nuts with vitamin E and healthy fats",628,15,17,61,9.7,"Vitamin E;Manganese;Healthy fats","Heart health;Skin health;Antioxidant support",tree nuts,fall,15
+Macadamia Nuts,nuts,"Creamy nuts with highest healthy fat content",718,7.9,14,76,8.6,"Vitamin B1;Manganese;Healthy fats","Heart health;Brain function;Energy",tree nuts,year-round,10
+Brazil Nuts,nuts,"Large nuts with exceptional selenium content",656,14,12,66,7.5,"Selenium;Magnesium;Healthy fats","Immune support;Thyroid health;Heart health",tree nuts,year-round,10
+Pine Nuts,nuts,"Small nuts with pinolenic acid",673,14,13,68,3.7,"Pinolenic acid;Vitamin E;Zinc","Appetite control;Heart health;Immune support",tree nuts,year-round,15
+Basil,herbs,"Aromatic herb with anti-inflammatory properties",22,3.2,2.6,0.6,1.6,"Vitamin K;Iron;Antioxidants","Anti-inflammatory;Digestive health;Immune support",culinary herbs,summer,0
+Cilantro,herbs,"Fresh herb with detoxifying properties",23,2.1,3.7,0.5,2.8,"Vitamin A;Vitamin K;Antioxidants","Detoxification;Digestive health;Anti-inflammatory",culinary herbs,summer,0
+Mint,herbs,"Refreshing herb with digestive benefits",44,3.8,8.4,0.7,6.8,"Vitamin A;Iron;Menthol","Digestive health;Respiratory health;Fresh breath",culinary herbs,summer,0
+Rosemary,herbs,"Aromatic herb with memory-enhancing properties",131,3.3,21,6.0,14.1,"Iron;Calcium;Rosmarinic acid","Memory enhancement;Anti-inflammatory;Digestive health",culinary herbs,summer,0
+Thyme,herbs,"Aromatic herb with thymol compound",101,5.6,24,1.7,14.0,"Iron;Calcium;Thymol","Respiratory health;Anti-inflammatory;Immune support",culinary herbs,summer,0
+Oregano,herbs,"Mediterranean herb with carvacrol compound",69,9.0,69,4.3,42.8,"Iron;Calcium;Carvacrol","Anti-inflammatory;Immune support;Digestive health",culinary herbs,summer,0
+Sage,herbs,"Aromatic herb with rosmarinic acid",315,10.6,61,12.8,40.3,"Iron;Calcium;Rosmarinic acid","Memory enhancement;Anti-inflammatory;Digestive health",culinary herbs,summer,0
+Lavender,herbs,"Calming herb with linalool compound",287,4.0,54,12.0,37.0,"Linalool;Iron;Calcium","Relaxation;Sleep support;Anti-inflammatory",medicinal herbs,summer,0
+Lemon Balm,herbs,"Calming herb with rosmarinic acid",44,3.8,8.4,0.7,6.8,"Rosmarinic acid;Iron;Calcium","Relaxation;Sleep support;Anti-inflammatory",medicinal herbs,summer,0
+Chamomile,herbs,"Calming herb with apigenin compound",1,0.1,0.2,0.0,0.0,"Apigenin;Flavonoids;Antioxidants","Relaxation;Sleep support;Digestive health",medicinal herbs,summer,0
+Lemon Verbena,herbs,"Citrus herb with citral compound",44,3.8,8.4,0.7,6.8,"Citral;Iron;Calcium","Relaxation;Digestive health;Immune support",medicinal herbs,summer,0
+Bergamot,herbs,"Citrus herb with bergamottin compound",44,3.8,8.4,0.7,6.8,"Bergamottin;Iron;Calcium","Relaxation;Digestive health;Immune support",medicinal herbs,summer,0
+Turmeric,spices,"Golden spice with powerful anti-inflammatory compounds",354,8,65,10,21,"Curcumin;Iron;Manganese","Anti-inflammatory;Joint health;Digestive support",root spices,year-round,0
+Cinnamon,spices,"Sweet spice with blood sugar benefits",247,4,81,1.2,53.1,"Cinnamaldehyde;Manganese;Antioxidants","Blood sugar control;Anti-inflammatory;Heart health",bark spices,year-round,0
+Ginger,spices,"Root spice with digestive and anti-nausea properties",80,1.8,18,0.8,2.0,"Gingerol;Potassium;Magnesium","Digestive health;Anti-nausea;Anti-inflammatory",root spices,year-round,0
+Black Pepper,spices,"King of spices with piperine for nutrient absorption",251,10,64,3.3,25.3,"Piperine;Iron;Manganese","Nutrient absorption;Digestive health;Anti-inflammatory",seed spices,year-round,0
+Cayenne Pepper,spices,"Hot spice with capsaicin compound",318,12,57,17,27.0,"Capsaicin;Vitamin A;Iron","Metabolism boost;Pain relief;Heart health",seed spices,year-round,32
+Nutmeg,spices,"Warm spice with myristicin compound",525,6,49,36,20.8,"Myristicin;Manganese;Copper","Digestive health;Pain relief;Brain function",seed spices,year-round,0
+Cardamom,spices,"Aromatic spice with cineole compound",311,11,68,7,28.0,"Cineole;Iron;Manganese","Digestive health;Respiratory health;Anti-inflammatory",seed spices,year-round,0
+Cloves,spices,"Aromatic spice with eugenol compound",274,6,66,13,33.9,"Eugenol;Manganese;Iron","Pain relief;Anti-inflammatory;Digestive health",seed spices,year-round,0
+Allspice,spices,"Warm spice with eugenol compound",263,6,72,8,21.0,"Eugenol;Iron;Manganese","Digestive health;Pain relief;Anti-inflammatory",seed spices,year-round,0
+Star Anise,spices,"Star-shaped spice with anethole compound",337,18,50,16,15.0,"Anethole;Iron;Calcium","Digestive health;Respiratory health;Anti-inflammatory",seed spices,year-round,0
+Fennel Seeds,spices,"Sweet seeds with anethole compound",345,18,52,15,39.8,"Anethole;Iron;Calcium","Digestive health;Respiratory health;Anti-inflammatory",seed spices,year-round,0
+Coriander Seeds,spices,"Aromatic seeds with linalool compound",298,12,55,18,41.9,"Linalool;Iron;Calcium","Digestive health;Anti-inflammatory;Immune support",seed spices,year-round,0
+Cumin Seeds,spices,"Warm seeds with cuminaldehyde compound",375,18,44,22,10.5,"Cuminaldehyde;Iron;Calcium","Digestive health;Iron absorption;Anti-inflammatory",seed spices,year-round,0
+Fenugreek Seeds,spices,"Bitter seeds with diosgenin compound",323,23,58,6,25.0,"Diosgenin;Iron;Protein","Blood sugar control;Lactation support;Digestive health",seed spices,year-round,0
+Mustard Seeds,spices,"Pungent seeds with allyl isothiocyanate",508,26,28,36,12.2,"Allyl isothiocyanate;Iron;Selenium","Anti-inflammatory;Cancer prevention;Digestive health",seed spices,year-round,0
+Poppy Seeds,spices,"Tiny seeds with morphine alkaloids",525,18,28,42,19.5,"Morphine alkaloids;Calcium;Iron","Pain relief;Sleep support;Bone health",seed spices,year-round,0
+Sesame Seeds,spices,"Nutty seeds with sesamin compound",573,18,23,50,11.8,"Sesamin;Calcium;Iron","Bone health;Blood health;Heart health",seed spices,year-round,0
+Sunflower Seeds,spices,"Large seeds with vitamin E",584,21,20,51,8.6,"Vitamin E;Selenium;Protein","Antioxidant support;Immune support;Muscle building",seed spices,year-round,20
+Pumpkin Seeds,spices,"Green seeds with magnesium and zinc",559,19,54,19,18.4,"Magnesium;Zinc;Protein","Heart health;Immune support;Muscle building",seed spices,fall,10
+Chia Seeds,spices,"Tiny seeds with omega-3 and fiber",486,17,42,31,34.4,"Omega-3;Fiber;Protein","Heart health;Digestive health;Muscle building",seed spices,year-round,30
+Flax Seeds,spices,"Small seeds with lignans and omega-3",534,18,29,42,27.3,"Lignans;Omega-3;Fiber","Hormone balance;Heart health;Digestive health",seed spices,year-round,35
+Hemp Seeds,spices,"Nutty seeds with complete protein",553,31,9,49,4.0,"Complete protein;Omega-3;Magnesium","Muscle building;Heart health;Bone health",seed spices,year-round,0
+Pomegranate Seeds,spices,"Juicy seeds with antioxidants",83,1.7,19,1.2,4.0,"Antioxidants;Vitamin C;Fiber","Heart health;Anti-inflammatory;Blood health",seed spices,fall,35
+Amaranth Seeds,spices,"Tiny seeds with complete protein",103,4.0,19,1.6,2.1,"Complete protein;Iron;Calcium","Muscle building;Blood health;Bone health",seed spices,fall,35
+Quinoa Seeds,spices,"Tiny seeds with complete protein",120,4.4,22,1.9,2.8,"Complete protein;Iron;Magnesium","Muscle building;Heart health;Gluten-free",seed spices,year-round,53
