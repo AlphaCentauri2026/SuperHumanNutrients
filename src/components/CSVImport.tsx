@@ -104,7 +104,7 @@ export default function CSVImport() {
         setUploadStatus('Import failed');
         setUploadProgress(0);
       }
-    } catch (error) {
+    } catch {
       setImportResult({
         success: false,
         message: 'Upload failed',

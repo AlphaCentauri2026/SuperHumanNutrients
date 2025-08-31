@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AI_CONSTANTS } from './constants';
+import { foodGroupOperations } from './database';
 
 // Initialize Google Generative AI with proper environment variable access
 // Make sure to use NEXT_PUBLIC_ prefix for client-side environment variables
@@ -26,46 +27,64 @@ export async function generateMealPlan(
   request: MealPlanRequest
 ): Promise<MealPlanResponse> {
   try {
-    if (!apiKey) {
-      throw new Error('AI API key not configured');
+    // Check if we have an AI API key for advanced generation
+    const hasAIKey = !!apiKey;
+
+    if (!hasAIKey) {
+      console.log('No AI API key configured, using fallback meal generation');
     }
 
-    // Fetch food suggestions from database to enhance AI creativity
+    // Get food suggestions directly from database to enhance AI creativity
     let foodSuggestions = '';
     try {
-      const foodsResponse = await fetch('/api/ai/foods');
-      if (foodsResponse.ok) {
-        const foodsData = await foodsResponse.json();
-        if (foodsData.success) {
-          const { categories } = foodsData.data;
-          foodSuggestions = `
+      const allFoodGroups = await foodGroupOperations.getAll();
+
+      // Categorize foods
+      const fruits = allFoodGroups
+        .filter(f => f.category === 'fruits')
+        .slice(0, 8);
+      const vegetables = allFoodGroups
+        .filter(f => f.category === 'vegetables')
+        .slice(0, 8);
+      const grains = allFoodGroups
+        .filter(f => f.category === 'grains')
+        .slice(0, 8);
+      const superfoods = allFoodGroups
+        .filter(f =>
+          f.benefits?.some(
+            benefit =>
+              benefit.toLowerCase().includes('superfood') ||
+              benefit.toLowerCase().includes('antioxidant') ||
+              benefit.toLowerCase().includes('nutrient-dense')
+          )
+        )
+        .slice(0, 6);
+      const exotic = allFoodGroups
+        .filter(f =>
+          f.benefits?.some(
+            benefit =>
+              benefit.toLowerCase().includes('exotic') ||
+              benefit.toLowerCase().includes('rare') ||
+              benefit.toLowerCase().includes('tropical') ||
+              benefit.toLowerCase().includes('ancient')
+          )
+        )
+        .slice(0, 6);
+
+      foodSuggestions = `
 AVAILABLE INGREDIENTS FROM COMPREHENSIVE DATABASE:
-- Fruits (${categories.fruits.count} available): ${categories.fruits.examples
-            .slice(0, 8)
-            .map((f: { name: string }) => f.name)
-            .join(', ')} and many more
-- Vegetables (${categories.vegetables.count} available): ${categories.vegetables.examples
-            .slice(0, 8)
-            .map((f: { name: string }) => f.name)
-            .join(', ')} and many more  
-- Grains (${categories.grains.count} available): ${categories.grains.examples
-            .slice(0, 8)
-            .map((f: { name: string }) => f.name)
-            .join(', ')} and many more
-- Superfoods (${categories.superfoods.count} available): ${categories.superfoods.examples
-            .slice(0, 6)
-            .map((f: { name: string }) => f.name)
-            .join(', ')} and many more
-- Exotic Foods (${categories.exotic.count} available): ${categories.exotic.examples
-            .slice(0, 6)
-            .map((f: { name: string }) => f.name)
-            .join(', ')} and many more
+- Fruits (${fruits.length} available): ${fruits.map(f => f.name).join(', ')} and many more
+- Vegetables (${vegetables.length} available): ${vegetables.map(f => f.name).join(', ')} and many more  
+- Grains (${grains.length} available): ${grains.map(f => f.name).join(', ')} and many more
+- Superfoods (${superfoods.length} available): ${superfoods.map(f => f.name).join(', ')} and many more
+- Exotic Foods (${exotic.length} available): ${exotic.map(f => f.name).join(', ')} and many more
 
 Use this diversity to create unique, surprising combinations that showcase the full range of available ingredients.`;
-        }
-      }
     } catch (error) {
-      console.log('Could not fetch food suggestions, using default prompt');
+      console.log(
+        'Could not fetch food suggestions from database, using default prompt:',
+        error
+      );
     }
 
     // We'll try multiple models with timeouts instead of pre-testing
@@ -166,48 +185,64 @@ Use this diversity to create unique, surprising combinations that showcase the f
       - Prioritize combinations rich in user's target nutrients
       - Surprise users with unexpected but delicious combinations`;
 
-    // Try multiple models with shorter timeouts for faster generation
-    const models = [
-      { name: 'gemini-1.5-flash', timeout: AI_CONSTANTS.TIMEOUTS.FLASH_MODEL },
-      { name: 'gemini-1.5-pro', timeout: AI_CONSTANTS.TIMEOUTS.PRO_MODEL },
-    ];
+    // Only try AI generation if we have an API key
+    if (hasAIKey) {
+      // Try multiple models with shorter timeouts for faster generation
+      const models = [
+        {
+          name: 'gemini-1.5-flash-latest',
+          timeout: AI_CONSTANTS.TIMEOUTS.FLASH_MODEL,
+        },
+        {
+          name: 'gemini-1.5-pro-latest',
+          timeout: AI_CONSTANTS.TIMEOUTS.PRO_MODEL,
+        },
+      ];
 
-    for (const modelConfig of models) {
-      try {
-        const currentModel = genAI.getGenerativeModel({
-          model: modelConfig.name,
-        });
+      for (const modelConfig of models) {
+        try {
+          const currentModel = genAI.getGenerativeModel({
+            model: modelConfig.name,
+          });
 
-        const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(
-            () =>
-              reject(
-                new Error(`AI generation timeout for ${modelConfig.name}`)
-              ),
-            modelConfig.timeout
-          );
-        });
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            setTimeout(
+              () =>
+                reject(
+                  new Error(`AI generation timeout for ${modelConfig.name}`)
+                ),
+              modelConfig.timeout
+            );
+          });
 
-        const generationPromise = currentModel.generateContent(prompt);
+          const generationPromise = currentModel.generateContent(prompt);
 
-        const result = await Promise.race([generationPromise, timeoutPromise]);
-        const response = await result.response;
-        const text = response.text();
+          const result = await Promise.race([
+            generationPromise,
+            timeoutPromise,
+          ]);
+          const response = await result.response;
+          const text = response.text();
 
-        return {
-          success: true,
-          mealPlan: text,
-        };
-      } catch (error) {
-        // Check if it's a model not found error
-        if (error instanceof Error && error.message.includes('404 Not Found')) {
-          continue; // Try next model silently
+          return {
+            success: true,
+            mealPlan: text,
+          };
+        } catch (error) {
+          // Check if it's a model not found error
+          if (
+            error instanceof Error &&
+            error.message.includes('404 Not Found')
+          ) {
+            continue; // Try next model silently
+          }
+          continue; // Try next model
         }
-        continue; // Try next model
       }
     }
 
-    // If all models fail, generate a simple fallback response
+    // If no AI API key or all models fail, generate a simple fallback response
+    console.log('Using fallback meal generation');
 
     // Create a simple fallback response with basic combinations
     const fallbackResponse = `COMBINATION 1 (Monday):

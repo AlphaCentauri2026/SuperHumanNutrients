@@ -204,11 +204,11 @@ export function CombinationDisplay({
             Your 7-Day Nutrition Plan
           </span>
         </div>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-muted-foreground max-w-2xl mx-auto">
           One unique fruit-vegetable-grain combination for each day of the week
         </p>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 inline-block">
-          <p className="text-sm text-blue-700">
+        <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg px-4 py-2 inline-block">
+          <p className="text-sm text-blue-700 dark:text-blue-300">
             Successfully parsed {validCombinations.length} of{' '}
             {displayCombinations.length} combinations
           </p>
@@ -221,7 +221,7 @@ export function CombinationDisplay({
           <Card
             key={index}
             data-card-index={index}
-            className="bg-white border-gray-200 shadow-lg hover:shadow-xl transition-shadow duration-300"
+            className="bg-card border-border shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
             <CardHeader
               className={`bg-gradient-to-r ${getRandomGradient(index)} text-white rounded-t-lg`}
@@ -237,18 +237,18 @@ export function CombinationDisplay({
             <CardContent className="p-6 space-y-4">
               {/* Ingredients Section */}
               <div className="space-y-3">
-                <h4 className="font-medium text-gray-900 text-sm">
+                <h4 className="font-medium text-foreground text-sm">
                   Ingredients:
                 </h4>
 
                 {combination.fruits && (
-                  <div className="flex items-center gap-2 bg-red-50 p-3 rounded-lg border border-red-200">
-                    <Apple className="w-4 h-4 text-red-500" />
+                  <div className="flex items-center gap-2 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-800">
+                    <Apple className="w-4 h-4 text-red-500 dark:text-red-400" />
                     <div>
-                      <span className="text-xs font-medium text-red-700">
+                      <span className="text-xs font-medium text-red-700 dark:text-red-300">
                         Fruits:
                       </span>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted-foreground">
                         {combination.fruits}
                       </p>
                     </div>
@@ -256,13 +256,13 @@ export function CombinationDisplay({
                 )}
 
                 {combination.vegetables && (
-                  <div className="flex items-center gap-2 bg-green-50 p-3 rounded-lg border border-green-200">
-                    <Carrot className="w-4 h-4 text-green-500" />
+                  <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                    <Carrot className="w-4 h-4 text-green-500 dark:text-green-400" />
                     <div>
-                      <span className="text-xs font-medium text-green-700">
+                      <span className="text-xs font-medium text-green-700 dark:text-green-300">
                         Vegetables:
                       </span>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted-foreground">
                         {combination.vegetables}
                       </p>
                     </div>
@@ -270,13 +270,13 @@ export function CombinationDisplay({
                 )}
 
                 {combination.grain && (
-                  <div className="flex items-center gap-2 bg-amber-50 p-3 rounded-lg border border-amber-200">
-                    <Wheat className="w-4 h-4 text-amber-600" />
+                  <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <Wheat className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                     <div>
-                      <span className="text-xs font-medium text-amber-700">
+                      <span className="text-xs font-medium text-amber-700 dark:text-amber-300">
                         Grain:
                       </span>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted-foreground">
                         {combination.grain}
                       </p>
                     </div>
@@ -288,12 +288,12 @@ export function CombinationDisplay({
               {combination.benefits && (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-red-500" />
-                    <h5 className="font-medium text-gray-900 text-sm">
+                    <Heart className="w-4 h-4 text-red-500 dark:text-red-400" />
+                    <h5 className="font-medium text-foreground text-sm">
                       Health Benefits:
                     </h5>
                   </div>
-                  <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">
+                  <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
                     {combination.benefits}
                   </p>
 
@@ -317,7 +317,7 @@ export function CombinationDisplay({
                         ?.map((nutrient: string, idx: number) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+                            className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs px-2 py-1 rounded-full"
                           >
                             <Leaf className="w-3 h-3" />
                             {nutrient}
@@ -332,12 +332,12 @@ export function CombinationDisplay({
               {combination.preparation && (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-blue-500" />
-                    <h5 className="font-medium text-gray-900 text-sm">
+                    <Clock className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+                    <h5 className="font-medium text-foreground text-sm">
                       Preparation:
                     </h5>
                   </div>
-                  <p className="text-sm text-gray-700 bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-muted-foreground bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg">
                     {combination.preparation}
                   </p>
                 </div>
@@ -350,9 +350,9 @@ export function CombinationDisplay({
                   disabled={loading || savedStatus[index] === 'saved'}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
                     savedStatus[index] === 'saved'
-                      ? 'bg-green-100 text-green-700 cursor-default'
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 cursor-default'
                       : savedStatus[index] === 'error'
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                        ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50'
                         : 'bg-green-600 hover:bg-green-700 text-white'
                   }`}
                 >

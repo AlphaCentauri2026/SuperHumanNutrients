@@ -1,45 +1,79 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateMealPlan, MealPlanRequest } from '@/lib/ai';
+import { applyRateLimit } from '@/middleware/rateLimit';
+import {
+  createSecurityMiddleware,
+  secureResponse,
+} from '@/middleware/security';
+import { MealPlanRequestSchema } from '@/lib/validation/schemas';
+import { sanitizeObject } from '@/lib/validation/sanitization';
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting (strict for AI endpoints)
+    const rateLimitResponse = await applyRateLimit(request, 'ai');
+    if (rateLimitResponse) return rateLimitResponse;
+
+    // Apply security middleware
+    const securityMiddleware = createSecurityMiddleware({
+      allowedMethods: ['POST'],
+      maxRequestSize: 1024 * 1024, // 1MB
+    });
+    const securityResponse = await securityMiddleware(request);
+    if (securityResponse) return securityResponse;
+
     // Get the request body
     const body: MealPlanRequest = await request.json();
 
-    // Validate the request
-    if (
-      !body.userPrompt &&
-      body.fruits.length === 0 &&
-      body.vegetables.length === 0 &&
-      body.grains.length === 0
-    ) {
-      return NextResponse.json(
-        {
-          error: 'Please provide either a nutrition goal or select food items',
-        },
-        { status: 400 }
+    // Validate the request using Zod schema
+    const validationResult = MealPlanRequestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return secureResponse(
+        NextResponse.json(
+          {
+            success: false,
+            error: 'Invalid request data',
+            details: validationResult.error.issues,
+          },
+          { status: 400 }
+        )
       );
     }
 
-    // Generate the meal plan using the server-side AI function
-    const response = await generateMealPlan(body);
+    // Sanitize the validated data
+    const sanitizedData = sanitizeObject(validationResult.data);
+
+    // Generate the meal plan using the server-side AI function with sanitized data
+    const response = await generateMealPlan(sanitizedData);
 
     if (response.success && response.mealPlan) {
-      return NextResponse.json({
-        success: true,
-        mealPlan: response.mealPlan,
-      });
+      return secureResponse(
+        NextResponse.json({
+          success: true,
+          mealPlan: response.mealPlan,
+        })
+      );
     } else {
-      return NextResponse.json(
-        { error: response.error || 'Failed to generate meal plan' },
-        { status: 500 }
+      return secureResponse(
+        NextResponse.json(
+          {
+            success: false,
+            error: response.error || 'Failed to generate meal plan',
+          },
+          { status: 500 }
+        )
       );
     }
   } catch (error) {
     console.error('Meal plan generation error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return secureResponse(
+      NextResponse.json(
+        {
+          success: false,
+          error: 'Internal server error',
+        },
+        { status: 500 }
+      )
     );
   }
 }

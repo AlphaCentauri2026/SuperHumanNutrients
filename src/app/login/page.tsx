@@ -130,22 +130,6 @@ export default function LoginPage() {
               Reset Authentication State
             </Button>
 
-            {/* Force Reset Button */}
-            <Button
-              onClick={() => {
-                console.log('Force reset clicked');
-                // Force clear all auth state
-                localStorage.clear();
-                sessionStorage.clear();
-                // Reload the page
-                window.location.reload();
-              }}
-              variant="outline"
-              className="w-full text-red-600 border-red-300 hover:bg-red-50"
-            >
-              Force Reset & Reload Page
-            </Button>
-
             {/* Error Display */}
             {error && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">

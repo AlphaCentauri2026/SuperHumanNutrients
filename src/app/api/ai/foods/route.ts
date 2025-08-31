@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { foodGroupOperations } from '@/lib/database';
 
 // Force dynamic rendering to prevent build-time execution
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Check if we're in build mode or if Firebase is not configured
     if (

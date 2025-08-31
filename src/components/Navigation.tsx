@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { TourTrigger } from '@/components/GuidedTour';
 import { Home, Calendar, Bookmark, LogOut, User } from 'lucide-react';
 
 const navigation = [
@@ -26,7 +28,10 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm">
+    <nav
+      className="bg-background border-b border-border shadow-sm"
+      data-tour="navigation"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
@@ -35,14 +40,18 @@ export function Navigation() {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">N</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">
+              <span className="text-xl font-bold text-foreground">
                 Superhuman Nutrition
               </span>
             </Link>
           </div>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1">
+          <nav
+            className="hidden md:flex items-center space-x-1"
+            role="navigation"
+            aria-label="Main navigation"
+          >
             {navigation.map(item => {
               const isActive = pathname === item.href;
               return (
@@ -51,23 +60,26 @@ export function Navigation() {
                     variant={isActive ? 'default' : 'ghost'}
                     className={`px-4 py-2 text-sm font-medium ${
                       isActive
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                     }`}
+                    aria-current={isActive ? 'page' : undefined}
                   >
-                    <item.icon className="w-4 h-4 mr-2" />
+                    <item.icon className="w-4 h-4 mr-2" aria-hidden="true" />
                     {item.name}
                   </Button>
                 </Link>
               );
             })}
-          </div>
+          </nav>
 
           {/* User Menu */}
           <div className="flex items-center space-x-4">
+            <TourTrigger />
+            <ThemeToggle />
             {user ? (
               <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                   <User className="w-4 h-4" />
                   <span className="hidden sm:inline-block">
                     {user.displayName || user.email?.split('@')[0] || 'User'}
@@ -77,7 +89,7 @@ export function Navigation() {
                   variant="outline"
                   size="sm"
                   onClick={handleLogout}
-                  className="text-gray-600 hover:text-gray-900 border-gray-300 hover:border-gray-400"
+                  className="text-muted-foreground hover:text-foreground border-border hover:border-border/80"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
@@ -85,7 +97,7 @@ export function Navigation() {
               </div>
             ) : (
               <Link href="/login">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   Sign In
                 </Button>
               </Link>
@@ -95,8 +107,12 @@ export function Navigation() {
       </div>
 
       {/* Mobile Navigation */}
-      <div className="md:hidden border-t border-gray-200">
-        <div className="px-2 pt-2 pb-3 space-y-1">
+      <div className="md:hidden border-t border-border">
+        <div
+          className="px-2 pt-2 pb-3 space-y-1"
+          role="navigation"
+          aria-label="Mobile navigation"
+        >
           {navigation.map(item => {
             const isActive = pathname === item.href;
             return (
@@ -104,11 +120,13 @@ export function Navigation() {
                 <div
                   className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
                     isActive
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
+                  role="menuitem"
+                  aria-current={isActive ? 'page' : undefined}
                 >
-                  <item.icon className="w-4 h-4 mr-3" />
+                  <item.icon className="w-4 h-4 mr-3" aria-hidden="true" />
                   {item.name}
                 </div>
               </Link>

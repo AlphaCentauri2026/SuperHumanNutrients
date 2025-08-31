@@ -4,8 +4,6 @@ import {
   UserPreferences,
   SavedCombination,
   NutritionGoal,
-  foodGroupOperations,
-  userPreferencesOperations,
   savedCombinationsOperations,
   nutritionGoalsOperations,
 } from '@/lib/database';

@@ -40,7 +40,7 @@ export default function AdminPage() {
         setMessage(`Error: ${data.error}`);
         setMessageType('error');
       }
-    } catch (error) {
+    } catch {
       setMessage(
         'Failed to initialize database. Please check your connection.'
       );
@@ -68,7 +68,7 @@ export default function AdminPage() {
         setMessage(`API test failed: ${data.error}`);
         setMessageType('error');
       }
-    } catch (error) {
+    } catch {
       setMessage('API test failed. Please check your connection.');
       setMessageType('error');
     } finally {

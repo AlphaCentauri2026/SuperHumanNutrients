@@ -10,11 +10,11 @@ import {
   query,
   where,
   orderBy,
-  limit,
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import { performanceMonitor } from '@/lib/monitoring';
 
 // ============================================================================
 // TYPES AND INTERFACES
@@ -112,17 +112,25 @@ export interface NutritionGoal {
 
 // Check if database is available
 const checkDb = () => {
-  // During build time, return a mock database to prevent build errors
-  if (
-    process.env.NODE_ENV === 'production' &&
-    !process.env.NEXT_PUBLIC_FIREBASE_API_KEY
-  ) {
-    throw new Error(
-      'Database not available in production without Firebase configuration'
-    );
+  // Check if we're in a server environment and have the necessary Firebase config
+  if (typeof window === 'undefined') {
+    // Server-side: check for Firebase config
+    const hasFirebaseConfig =
+      process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+      process.env.FIREBASE_API_KEY ||
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+
+    if (!hasFirebaseConfig) {
+      console.error('[database] Missing Firebase configuration on server');
+      throw new Error(
+        'Database not available on server without Firebase configuration'
+      );
+    }
   }
 
   if (!db) {
+    console.error('[database] Database not initialized');
     throw new Error('Database not initialized');
   }
   return db;
@@ -148,34 +156,75 @@ export const foodGroupOperations = {
 
   // Get all food groups
   async getAll(): Promise<FoodGroup[]> {
-    const database = checkDb();
-    const querySnapshot = await getDocs(collection(database, 'foodGroups'));
-    return querySnapshot.docs.map(
-      doc =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-        }) as FoodGroup
-    );
+    const startTime = Date.now();
+    try {
+      const database = checkDb();
+      const querySnapshot = await getDocs(collection(database, 'foodGroups'));
+      const results = querySnapshot.docs.map(
+        doc =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          }) as FoodGroup
+      );
+
+      performanceMonitor.recordMetric({
+        name: 'database_get_all_results',
+        value: results.length,
+        unit: 'count',
+        tags: { operation: 'get_all' },
+      });
+
+      // Record response time
+      const responseTime = Date.now() - startTime;
+      performanceMonitor.recordRequestTime(responseTime);
+
+      return results;
+    } catch (error) {
+      performanceMonitor.recordError('database_get_all', error as Error);
+      throw error;
+    }
   },
 
   // Get food groups by category
   async getByCategory(category: FoodGroup['category']): Promise<FoodGroup[]> {
-    const database = checkDb();
-    const q = query(
-      collection(database, 'foodGroups'),
-      where('category', '==', category),
-      where('isActive', '==', true),
-      orderBy('name')
-    );
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(
-      doc =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-        }) as FoodGroup
-    );
+    const startTime = Date.now();
+    try {
+      const database = checkDb();
+      const q = query(
+        collection(database, 'foodGroups'),
+        where('category', '==', category),
+        where('isActive', '==', true),
+        orderBy('name')
+      );
+      const querySnapshot = await getDocs(q);
+      const results = querySnapshot.docs.map(
+        doc =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          }) as FoodGroup
+      );
+
+      performanceMonitor.recordMetric({
+        name: 'database_get_by_category_results',
+        value: results.length,
+        unit: 'count',
+        tags: { operation: 'get_by_category', category },
+      });
+
+      // Record response time
+      const responseTime = Date.now() - startTime;
+      performanceMonitor.recordRequestTime(responseTime);
+
+      return results;
+    } catch (error) {
+      performanceMonitor.recordError(
+        'database_get_by_category',
+        error as Error
+      );
+      throw error;
+    }
   },
 
   // Get food group by ID
@@ -206,16 +255,35 @@ export const foodGroupOperations = {
 
   // Search food groups by name or nutrients
   async search(searchTerm: string): Promise<FoodGroup[]> {
-    const allGroups = await this.getAll();
-    const term = searchTerm.toLowerCase();
-    return allGroups.filter(
-      group =>
-        group.name.toLowerCase().includes(term) ||
-        group.nutrients.some(nutrient =>
-          nutrient.toLowerCase().includes(term)
-        ) ||
-        group.benefits.some(benefit => benefit.toLowerCase().includes(term))
-    );
+    const startTime = Date.now();
+    try {
+      const allGroups = await this.getAll();
+      const term = searchTerm.toLowerCase();
+      const results = allGroups.filter(
+        group =>
+          group.name.toLowerCase().includes(term) ||
+          group.nutrients.some(nutrient =>
+            nutrient.toLowerCase().includes(term)
+          ) ||
+          group.benefits.some(benefit => benefit.toLowerCase().includes(term))
+      );
+
+      performanceMonitor.recordMetric({
+        name: 'database_search_results',
+        value: results.length,
+        unit: 'count',
+        tags: { operation: 'search', term: searchTerm },
+      });
+
+      // Record response time
+      const responseTime = Date.now() - startTime;
+      performanceMonitor.recordRequestTime(responseTime);
+
+      return results;
+    } catch (error) {
+      performanceMonitor.recordError('database_search', error as Error);
+      throw error;
+    }
   },
 };
 
