@@ -49,11 +49,17 @@ jest.mock('@/lib/firebase', () => ({
   auth: {
     onAuthStateChanged: jest.fn(),
     signInWithPopup: jest.fn(),
+    signInWithRedirect: jest.fn(),
+    getRedirectResult: jest.fn(),
     signOut: jest.fn(),
   },
   db: {
     collection: jest.fn(),
     doc: jest.fn(),
+  },
+  googleProvider: {
+    setCustomParameters: jest.fn(),
+    addScope: jest.fn(),
   },
 }));
 

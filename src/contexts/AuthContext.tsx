@@ -90,11 +90,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setRedirectInProgress(true);
       console.log('[AuthContext] Starting Google sign-in');
 
-      const { signInWithRedirect, getRedirectResult } = await import(
-        'firebase/auth'
-      );
-      await signInWithRedirect(auth, googleProvider);
-      // The redirect will handle the rest, no need to set user here
+      // Check if we're in a mobile browser or on a local network IP
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      const isLocalNetwork =
+        typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname.startsWith('192.168.') ||
+          window.location.hostname.startsWith('10.') ||
+          window.location.hostname.startsWith('172.'));
+
+      console.log('[AuthContext] Device info:', {
+        userAgent: navigator.userAgent,
+        hostname: window.location.hostname,
+        isMobile,
+        isLocalNetwork,
+      });
+
+      // Try popup first for better UX, fallback to redirect if popup fails
+      try {
+        console.log('[AuthContext] Attempting Google sign-in with popup');
+        const { signInWithPopup } = await import('firebase/auth');
+        const result = await signInWithPopup(auth, googleProvider);
+        setUser(result.user);
+        setRedirectInProgress(false);
+        console.log('[AuthContext] Popup sign-in successful');
+      } catch (popupError) {
+        console.log(
+          '[AuthContext] Popup failed, falling back to redirect:',
+          popupError
+        );
+
+        // Fallback to redirect if popup fails (e.g., popup blocked)
+        const { signInWithRedirect } = await import('firebase/auth');
+        await signInWithRedirect(auth, googleProvider);
+        // The redirect will handle the rest, no need to set user here
+      }
     } catch (error) {
       console.error('[AuthContext] Sign-in failed:', error);
       setRedirectInProgress(false);
