@@ -24,6 +24,7 @@ import {
   Heart,
   Shield,
   Clock,
+  Target,
 } from 'lucide-react';
 import {
   fadeInUp,
@@ -77,10 +78,10 @@ export default function Home() {
       color: 'purple',
     },
     {
-      icon: Heart,
-      title: 'Catchy Health Names',
+      icon: Target,
+      title: 'Personalized Nutrition Goals',
       description:
-        'Fun, memorable names that make nutrition approachable and engaging.',
+        'Tailored meal plans that adapt to your specific health objectives and dietary preferences.',
       color: 'green',
     },
   ];
