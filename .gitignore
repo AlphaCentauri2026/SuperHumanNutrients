@@ -40,3 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 public/Super human nutrition.mov
+*.mov
+*.mp4

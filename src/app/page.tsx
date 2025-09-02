@@ -227,11 +227,7 @@ export default function Home() {
                     onLoadStart={() => console.log('Video loading started')}
                     onCanPlay={() => console.log('Video can play')}
                   >
-                    <source
-                      src="/Super human nutrition.mov"
-                      type="video/quicktime"
-                    />
-                    <source src="/Super human nutrition.mov" type="video/mp4" />
+                    <source src="/Super human nutrition.mp4" type="video/mp4" />
                     <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30">
                       <div className="text-center">
                         <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
