@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
+import { AnimatedButton } from '@/components/ui/animated-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Play,
@@ -31,7 +31,7 @@ interface TourStep {
 }
 
 const tourSteps: TourStep[] = [
-  // Planner Page Tour - Simplified Flow
+  // Planner Page Tour - Corrected Flow
   {
     id: 'planner-welcome',
     title: 'AI Meal Planner 🍽️',
@@ -47,7 +47,7 @@ const tourSteps: TourStep[] = [
     title: 'Food Selection Areas 🍎🥕🌾',
     description:
       'Here you can add fruits, vegetables, and grains to your meal plan. Each section has suggestions and you can add custom items too.',
-    target: '[data-tour="user-prompt"]',
+    target: '[data-tour="food-selection"]',
     position: 'bottom',
     icon: <Apple className="w-5 h-5" />,
     page: 'planner',
@@ -57,7 +57,7 @@ const tourSteps: TourStep[] = [
     title: 'Nutrition Goals 📝',
     description:
       'Tell our AI what you want to achieve. Be specific: "I want energy for workouts" or "Help me lose weight healthily".',
-    target: '[data-tour="nutrition-goals"]',
+    target: '[data-tour="user-prompt"]',
     position: 'top',
     icon: <BookOpen className="w-5 h-5" />,
     page: 'planner',
@@ -141,7 +141,7 @@ const tourSteps: TourStep[] = [
     title: 'Tour Complete! 🎊',
     description:
       "You're now ready to create amazing meal plans! Remember: you can always restart this tour from the navigation menu.",
-    target: 'body',
+    target: '[data-tour="generate-button"]',
     position: 'top',
     icon: <CheckCircle className="w-6 h-6" />,
     page: 'global',
@@ -197,6 +197,9 @@ export function GuidedTour({ isOpen, onClose, currentPage }: GuidedTourProps) {
     if (element) {
       element.classList.add('tour-highlight');
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      // If element doesn't exist (e.g., completion step on wrong page), scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -258,14 +261,14 @@ export function GuidedTour({ isOpen, onClose, currentPage }: GuidedTourProps) {
                 </div>
                 <CardTitle className="text-lg">{currentStep.title}</CardTitle>
               </div>
-              <Button
+              <AnimatedButton
                 variant="ghost"
                 size="sm"
                 onClick={skipTour}
                 className="h-8 w-8 p-0"
               >
                 <X className="w-4 h-4" />
-              </Button>
+              </AnimatedButton>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -274,17 +277,17 @@ export function GuidedTour({ isOpen, onClose, currentPage }: GuidedTourProps) {
             </p>
 
             {currentStep.action && (
-              <Button
+              <AnimatedButton
                 onClick={currentStep.action.onClick}
                 className="w-full bg-primary hover:bg-primary/90"
               >
                 {currentStep.action.text}
-              </Button>
+              </AnimatedButton>
             )}
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Button
+                <AnimatedButton
                   variant="outline"
                   size="sm"
                   onClick={prevStep}
@@ -292,8 +295,8 @@ export function GuidedTour({ isOpen, onClose, currentPage }: GuidedTourProps) {
                 >
                   <ArrowLeft className="w-4 h-4 mr-1" />
                   Back
-                </Button>
-                <Button variant="outline" size="sm" onClick={nextStep}>
+                </AnimatedButton>
+                <AnimatedButton variant="outline" size="sm" onClick={nextStep}>
                   {currentStepIndex === relevantSteps.length - 1 ? (
                     <>
                       <CheckCircle className="w-4 h-4 mr-1" />
@@ -305,7 +308,7 @@ export function GuidedTour({ isOpen, onClose, currentPage }: GuidedTourProps) {
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </>
                   )}
-                </Button>
+                </AnimatedButton>
               </div>
 
               <div className="text-xs text-muted-foreground">
@@ -365,7 +368,7 @@ export function TourTrigger() {
 
   return (
     <>
-      <Button
+      <AnimatedButton
         variant="outline"
         size="sm"
         onClick={() => setIsOpen(true)}
@@ -373,7 +376,7 @@ export function TourTrigger() {
       >
         <Play className="w-4 h-4" />
         Take Tour
-      </Button>
+      </AnimatedButton>
 
       <GuidedTour
         isOpen={isOpen}

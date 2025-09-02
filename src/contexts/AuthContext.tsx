@@ -15,6 +15,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Export AuthContext for testing
+export { AuthContext };
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

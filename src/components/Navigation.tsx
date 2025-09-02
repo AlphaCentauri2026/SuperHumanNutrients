@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { AnimatedButton } from '@/components/ui/animated-button';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { TourTrigger } from '@/components/GuidedTour';
@@ -63,7 +63,7 @@ export function Navigation() {
               const isActive = pathname === item.href;
               return (
                 <Link key={item.name} href={item.href}>
-                  <Button
+                  <AnimatedButton
                     variant={isActive ? 'default' : 'ghost'}
                     className={`px-4 py-2 text-sm font-medium ${
                       isActive
@@ -74,7 +74,7 @@ export function Navigation() {
                   >
                     <item.icon className="w-4 h-4 mr-2" aria-hidden="true" />
                     {item.name}
-                  </Button>
+                  </AnimatedButton>
                 </Link>
               );
             })}
@@ -92,7 +92,7 @@ export function Navigation() {
                     {user.displayName || user.email?.split('@')[0] || 'User'}
                   </span>
                 </div>
-                <Button
+                <AnimatedButton
                   variant="outline"
                   size="sm"
                   onClick={handleLogout}
@@ -100,13 +100,13 @@ export function Navigation() {
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
-                </Button>
+                </AnimatedButton>
               </div>
             ) : (
               <Link href="/login">
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                <AnimatedButton className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   Sign In
-                </Button>
+                </AnimatedButton>
               </Link>
             )}
           </div>

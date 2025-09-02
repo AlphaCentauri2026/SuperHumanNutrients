@@ -15,13 +15,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Superhuman Nutrition - AI-Powered Meal Planning',
+  title: 'AI-Powered Nutrition That Actually Works | Superhuman Nutrition',
   description:
-    'Generate optimal meal plans combining fruits, vegetables, and grains using AI. Personalized nutrition planning for a healthier lifestyle.',
+    'Discover unique fruit, veggie, and grain combinations designed to boost your health — powered by AI. Free to try, science-backed nutrition planning.',
+  keywords:
+    'AI nutrition, meal planning, healthy eating, food combinations, nutrition AI, personalized nutrition',
   icons: {
     icon: '/logo.png',
     shortcut: '/logo.png',
     apple: '/logo.png',
+  },
+  openGraph: {
+    title: 'AI-Powered Nutrition That Actually Works',
+    description:
+      'Discover unique fruit, veggie, and grain combinations designed to boost your health — powered by AI.',
+    type: 'website',
+    images: ['/logo.png'],
   },
 };
 

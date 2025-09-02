@@ -24,10 +24,12 @@ export async function POST(request: NextRequest) {
 
     // Get the request body
     const body: MealPlanRequest = await request.json();
+    console.log('📡 Meal plan request body:', JSON.stringify(body, null, 2));
 
     // Validate the request using Zod schema
     const validationResult = MealPlanRequestSchema.safeParse(body);
     if (!validationResult.success) {
+      console.log('❌ Validation failed:', validationResult.error.issues);
       return secureResponse(
         NextResponse.json(
           {

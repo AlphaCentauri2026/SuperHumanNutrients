@@ -155,7 +155,7 @@ Use this diversity to create unique, surprising combinations that showcase the f
 
       REQUIRED OUTPUT STRUCTURE (exactly like this):
       COMBINATION 1 (Monday):
-      Name: [catchy health-focused name]
+      Name: [creative, catchy health-focused name that sounds appealing and memorable]
       Fruits: [specific fruits with quantities]
       Vegetables: [specific vegetables with quantities]
       Grain: [specific grain with quantity]
@@ -163,7 +163,7 @@ Use this diversity to create unique, surprising combinations that showcase the f
       Preparation: [simple prep method]
 
       COMBINATION 2 (Tuesday):
-      Name: [catchy health-focused name]
+      Name: [creative, catchy health-focused name that sounds appealing and memorable]
       Fruits: [specific fruits with quantities]
       Vegetables: [specific vegetables with quantities]
       Grain: [specific grain with quantity]
@@ -183,7 +183,9 @@ Use this diversity to create unique, surprising combinations that showcase the f
       - Tailor to user's nutrition goal
       - Keep preparation simple
       - Prioritize combinations rich in user's target nutrients
-      - Surprise users with unexpected but delicious combinations`;
+      - Surprise users with unexpected but delicious combinations
+      - Create catchy, memorable names that make nutrition fun and appealing
+      - Use creative naming like "Power Pack", "Energy Boost", "Immunity Shield", "Brain Fuel", etc.`;
 
     // Only try AI generation if we have an API key
     if (hasAIKey) {
@@ -262,7 +264,7 @@ Benefits: High in potassium, antioxidants, and complex carbs for sustained energ
 Preparation: Cook rice, roast sweet potato, steam kale, add fresh fruits
 
 COMBINATION 3 (Wednesday):
-Name: "Vitamin C Immunity Mix"
+Name: "Vitamin C Immunity Shield"
 Fruits: 1 cup pineapple, 1 medium kiwi
 Vegetables: 1 cup bell peppers, 1 cup Brussels sprouts
 Grain: 1/2 cup farro
@@ -270,7 +272,7 @@ Benefits: Packed with vitamin C, fiber, and immune-boosting nutrients
 Preparation: Cook farro, roast vegetables, add fresh fruits
 
 COMBINATION 4 (Thursday):
-Name: "Fiber-Rich Energy Bowl"
+Name: "Fiber-Rich Energy Explosion"
 Fruits: 1 cup raspberries, 1 medium apple
 Vegetables: 1 cup carrots, 1 cup cauliflower
 Grain: 1/2 cup barley
@@ -286,7 +288,7 @@ Benefits: Rich in antioxidants, nitrates, and anti-inflammatory compounds
 Preparation: Cook wild rice, roast beets, add fresh arugula and fruits
 
 COMBINATION 6 (Saturday):
-Name: "Calcium-Rich Greens Bowl"
+Name: "Calcium-Rich Bone Builder"
 Fruits: 1 cup figs, 1 medium pear
 Vegetables: 1 cup collard greens, 1 cup bok choy
 Grain: 1/2 cup amaranth
@@ -294,7 +296,7 @@ Benefits: High in calcium, vitamin K, and minerals for bone health
 Preparation: Cook amaranth, steam greens, add fresh fruits
 
 COMBINATION 7 (Sunday):
-Name: "Omega-3 Brain Boost"
+Name: "Omega-3 Brain Fuel"
 Fruits: 1 cup avocado, 1 medium grapefruit
 Vegetables: 1 cup Brussels sprouts, 1 cup asparagus
 Grain: 1/2 cup teff

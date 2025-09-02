@@ -1,26 +1,34 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatedCard, ElevatedCard } from '@/components/ui/animated-card';
+import {
+  AnimatedButton,
+  GradientButton,
+} from '@/components/ui/animated-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import {
-  Loader2,
   Plus,
   X,
   Sparkles,
   Target,
-  Database,
-  ChevronDown,
-  ChevronUp,
+  Apple,
+  Carrot,
+  Wheat,
+  Star,
+  CheckCircle,
+  RefreshCw,
+  Save,
+  Share2,
 } from 'lucide-react';
 import { CombinationDisplay } from './CombinationDisplay';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDatabase } from '@/hooks/useDatabase';
-import { ErrorBoundary } from './ErrorBoundary';
+import { fadeInUp, staggerContainer } from '@/lib/animations';
 
 interface Combination {
   name?: string;
@@ -60,7 +68,7 @@ interface FoodGroup {
 
 export function MealPlanner() {
   const { user } = useAuth();
-  const { getFoodGroups, loading: dbLoading, error: dbError } = useDatabase();
+  const { getFoodGroups } = useDatabase();
 
   const [fruits, setFruits] = useState<string[]>([]);
   const [vegetables, setVegetables] = useState<string[]>([]);
@@ -72,130 +80,23 @@ export function MealPlanner() {
   const [preferences, setPreferences] = useState('');
   const [dietaryRestrictions, setDietaryRestrictions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [mealPlan, setMealPlan] = useState<string>('');
+
   const [parsedCombinations, setParsedCombinations] = useState<Combination[]>(
     []
   );
   const [error, setError] = useState<string>('');
 
-  // Database food groups
-  const [allFoodGroups, setAllFoodGroups] = useState<FoodGroup[]>([]);
-  const [categorizedFoods, setCategorizedFoods] = useState({
-    fruits: [] as FoodGroup[],
-    vegetables: [] as FoodGroup[],
-    grains: [] as FoodGroup[],
-  });
-  const [showDatabase, setShowDatabase] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState({
-    fruits: false,
-    vegetables: false,
-    grains: false,
-  });
-  const [usingFallbackData, setUsingFallbackData] = useState(false);
-
   const loadFoodGroups = useCallback(async () => {
     try {
-      const foodGroups = await getFoodGroups();
-      setAllFoodGroups(foodGroups);
-
-      // Check if we're using fallback data
-      if (foodGroups.length > 0 && foodGroups[0].id?.startsWith('fallback-')) {
-        setUsingFallbackData(true);
-      }
-
-      // Categorize foods by type
-      const categorized = {
-        fruits: foodGroups.filter((f: FoodGroup) =>
-          f.category?.toLowerCase().includes('fruit')
-        ),
-        vegetables: foodGroups.filter((f: FoodGroup) =>
-          f.category?.toLowerCase().includes('vegetable')
-        ),
-        grains: foodGroups.filter(
-          (f: FoodGroup) =>
-            f.category?.toLowerCase().includes('grain') ||
-            f.category?.toLowerCase().includes('cereal') ||
-            f.category?.toLowerCase().includes('carbohydrate')
-        ),
-      };
-
-      setCategorizedFoods(categorized);
+      await getFoodGroups();
     } catch (error) {
-      console.error('Failed to load food groups:', error);
-      setUsingFallbackData(true);
+      console.error('Error loading food groups:', error);
     }
   }, [getFoodGroups]);
 
-  // Load food groups from database on component mount
   useEffect(() => {
     loadFoodGroups();
   }, [loadFoodGroups]);
-
-  const toggleCategory = (category: keyof typeof expandedCategories) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [category]: !prev[category],
-    }));
-  };
-
-  // Function to parse AI response into structured combinations
-  const parseAIResponse = (aiResponse: string): Combination[] => {
-    try {
-      console.log('Parsing AI response:', aiResponse.substring(0, 200) + '...'); // Debug log
-
-      const combinations: Combination[] = [];
-      const lines = aiResponse.split('\n');
-      let currentCombination: Partial<Combination> = {};
-
-      for (const line of lines) {
-        const trimmedLine = line.trim();
-
-        // Check if we're starting a new combination
-        if (trimmedLine.match(/^COMBINATION \d+ \(/)) {
-          // Save previous combination if it exists
-          if (Object.keys(currentCombination).length > 0) {
-            combinations.push(currentCombination as Combination);
-          }
-
-          // Start new combination
-          currentCombination = {};
-        } else if (trimmedLine.startsWith('Name:')) {
-          currentCombination.name = trimmedLine
-            .replace('Name:', '')
-            .trim()
-            .replace(/"/g, '');
-        } else if (trimmedLine.startsWith('Fruits:')) {
-          currentCombination.fruits = trimmedLine.replace('Fruits:', '').trim();
-        } else if (trimmedLine.startsWith('Vegetables:')) {
-          currentCombination.vegetables = trimmedLine
-            .replace('Vegetables:', '')
-            .trim();
-        } else if (trimmedLine.startsWith('Grain:')) {
-          currentCombination.grain = trimmedLine.replace('Grain:', '').trim();
-        } else if (trimmedLine.startsWith('Benefits:')) {
-          currentCombination.benefits = trimmedLine
-            .replace('Benefits:', '')
-            .trim();
-        } else if (trimmedLine.startsWith('Preparation:')) {
-          currentCombination.preparation = trimmedLine
-            .replace('Preparation:', '')
-            .trim();
-        }
-      }
-
-      // Add the last combination
-      if (Object.keys(currentCombination).length > 0) {
-        combinations.push(currentCombination as Combination);
-      }
-
-      return combinations.filter(
-        combo => combo.fruits || combo.vegetables || combo.grain
-      );
-    } catch (error) {
-      console.error('Error parsing AI response:', error);
-      return [];
-    }
-  };
 
   const addFoodItem = (
     type: 'fruits' | 'vegetables' | 'grains',
@@ -243,7 +144,6 @@ export function MealPlanner() {
   const resetAll = () => {
     clearAllFoods();
     clearAllPreferences();
-    setMealPlan('');
     setParsedCombinations([]);
     setError('');
   };
@@ -281,7 +181,6 @@ export function MealPlanner() {
 
     setLoading(true);
     setError('');
-    setMealPlan('');
     setParsedCombinations([]);
 
     try {
@@ -320,12 +219,18 @@ export function MealPlanner() {
       console.log('📡 API Response data:', data);
 
       if (data.success) {
-        setMealPlan(data.mealPlan);
         console.log('Raw AI Response:', data.mealPlan); // Debug log
         // Parse the AI response into structured combinations
         const parsed = parseAIResponse(data.mealPlan);
         setParsedCombinations(parsed);
         console.log('Parsed combinations count:', parsed.length); // Debug log
+
+        // If parsing failed, try to use a fallback response
+        if (parsed.length === 0) {
+          console.log('Parsing failed, using fallback response');
+          const fallbackCombinations = getFallbackCombinations();
+          setParsedCombinations(fallbackCombinations);
+        }
       } else {
         setError(data.error || 'Failed to generate meal plan');
       }
@@ -348,6 +253,8 @@ export function MealPlanner() {
     onRemove,
     suggestions,
     onClear,
+    icon,
+    color,
     ...props
   }: {
     title: string;
@@ -358,39 +265,53 @@ export function MealPlanner() {
     onRemove: (item: string) => void;
     suggestions: string[];
     onClear: () => void;
+    icon: React.ReactNode;
+    color: string;
     [key: string]: unknown;
   }) => (
-    <div className="space-y-3" {...props}>
+    <div className="space-y-4" {...props}>
       <div className="flex items-center justify-between">
-        <Label className="text-sm font-medium text-foreground">{title}</Label>
+        <div className="flex items-center gap-2">
+          <div
+            className={`w-8 h-8 ${color} rounded-lg flex items-center justify-center`}
+          >
+            {icon}
+          </div>
+          <Label className="text-sm font-medium text-foreground">{title}</Label>
+        </div>
         {items.length > 0 && (
-          <Button
+          <AnimatedButton
             onClick={onClear}
             variant="ghost"
             size="sm"
             className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs"
           >
             Clear All
-          </Button>
+          </AnimatedButton>
         )}
       </div>
 
       {/* Selected Items */}
       <div className="flex flex-wrap gap-2">
-        {items.map((item, index) => (
-          <Badge
-            key={index}
-            variant="secondary"
-            className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800 flex items-center gap-1"
+        {items.map(item => (
+          <div
+            key={`${title}-${item}`}
+            className="animate-in fade-in-0 scale-in-95 duration-150"
           >
-            {item}
-            <button
-              onClick={() => onRemove(item)}
-              className="ml-1 hover:text-blue-600 dark:hover:text-blue-400"
+            <Badge
+              variant="secondary"
+              className={`${color} text-white border-0 flex items-center gap-1`}
             >
-              <X className="w-3 h-3" />
-            </button>
-          </Badge>
+              {item}
+              <button
+                onClick={() => onRemove(item)}
+                className="ml-1 hover:opacity-80 transition-opacity"
+                type="button"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </Badge>
+          </div>
         ))}
       </div>
 
@@ -399,659 +320,502 @@ export function MealPlanner() {
         <Input
           value={newItem}
           onChange={e => setNewItem(e.target.value)}
-          placeholder={`Add ${title.toLowerCase()}`}
+          placeholder={`Add ${title.toLowerCase()}...`}
           className="flex-1"
-          onKeyPress={e => e.key === 'Enter' && onAdd()}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              onAdd();
+            }
+          }}
         />
-        <Button onClick={onAdd} size="sm" variant="outline">
-          <Plus className="w-4 h-4" />
-        </Button>
+        <AnimatedButton
+          onClick={onAdd}
+          size="sm"
+          icon={<Plus className="w-4 h-4" />}
+          disabled={!newItem.trim()}
+        >
+          Add
+        </AnimatedButton>
       </div>
 
-      {/* Quick Suggestions */}
-      <div className="flex flex-wrap gap-2">
-        {suggestions
-          .filter(item => !items.includes(item))
-          .slice(0, 5)
-          .map((item, index) => (
-            <Badge
-              key={index}
-              variant="outline"
-              className="cursor-pointer hover:bg-accent"
-              onClick={() => {
-                addFoodItem(
-                  title.toLowerCase() as 'fruits' | 'vegetables' | 'grains',
-                  item,
-                  title === 'Fruits'
-                    ? setFruits
-                    : title === 'Vegetables'
-                      ? setVegetables
-                      : setGrains
-                );
+      {/* Suggestions */}
+      {suggestions.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {suggestions.slice(0, 5).map(suggestion => (
+            <motion.button
+              key={`${title}-suggestion-${suggestion}`}
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                // Directly add the suggestion without intermediate state changes or delays
+                if (title === 'Fruits') {
+                  setFruits(prev =>
+                    prev.includes(suggestion) ? prev : [...prev, suggestion]
+                  );
+                } else if (title === 'Vegetables') {
+                  setVegetables(prev =>
+                    prev.includes(suggestion) ? prev : [...prev, suggestion]
+                  );
+                } else if (title === 'Grains') {
+                  setGrains(prev =>
+                    prev.includes(suggestion) ? prev : [...prev, suggestion]
+                  );
+                }
               }}
+              className={`text-xs px-2 py-1 rounded-full border ${color.replace('bg-', 'border-')} hover:${color} hover:text-white transition-colors cursor-pointer`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.1 }}
+              type="button"
             >
-              {item}
-            </Badge>
+              {suggestion}
+            </motion.button>
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 
+  const getFallbackCombinations = (): Combination[] => {
+    return [
+      {
+        name: 'Iron-Rich Power Bowl',
+        fruits: '1 cup strawberries, 1 medium orange',
+        vegetables: '2 cups spinach, 1 cup broccoli',
+        grain: '1/2 cup quinoa',
+        benefits: 'Rich in iron, vitamin C, and fiber for energy and immunity',
+        preparation: 'Steam quinoa, sauté vegetables, add fresh fruits',
+      },
+      {
+        name: 'Potassium Boost Medley',
+        fruits: '1 medium banana, 1 cup blueberries',
+        vegetables: '1 cup sweet potato, 1 cup kale',
+        grain: '1/2 cup brown rice',
+        benefits:
+          'High in potassium, antioxidants, and complex carbs for sustained energy',
+        preparation:
+          'Cook rice, roast sweet potato, steam kale, add fresh fruits',
+      },
+      {
+        name: 'Vitamin C Immunity Shield',
+        fruits: '1 cup pineapple, 1 medium kiwi',
+        vegetables: '1 cup bell peppers, 1 cup Brussels sprouts',
+        grain: '1/2 cup farro',
+        benefits: 'Packed with vitamin C, fiber, and immune-boosting nutrients',
+        preparation: 'Cook farro, roast vegetables, add fresh fruits',
+      },
+      {
+        name: 'Fiber-Rich Energy Explosion',
+        fruits: '1 cup raspberries, 1 medium apple',
+        vegetables: '1 cup carrots, 1 cup cauliflower',
+        grain: '1/2 cup barley',
+        benefits:
+          'High fiber content for digestive health and sustained energy',
+        preparation: 'Cook barley, steam vegetables, add fresh fruits',
+      },
+      {
+        name: 'Antioxidant Power Pack',
+        fruits: '1 cup blackberries, 1 medium pomegranate',
+        vegetables: '1 cup beets, 1 cup arugula',
+        grain: '1/2 cup wild rice',
+        benefits:
+          'Rich in antioxidants, nitrates, and anti-inflammatory compounds',
+        preparation:
+          'Cook wild rice, roast beets, add fresh arugula and fruits',
+      },
+      {
+        name: 'Calcium-Rich Bone Builder',
+        fruits: '1 cup figs, 1 medium pear',
+        vegetables: '1 cup collard greens, 1 cup bok choy',
+        grain: '1/2 cup amaranth',
+        benefits: 'High in calcium, vitamin K, and minerals for bone health',
+        preparation: 'Cook amaranth, steam greens, add fresh fruits',
+      },
+      {
+        name: 'Omega-3 Brain Fuel',
+        fruits: '1 cup avocado, 1 medium grapefruit',
+        vegetables: '1 cup Brussels sprouts, 1 cup asparagus',
+        grain: '1/2 cup teff',
+        benefits:
+          'Rich in healthy fats, B vitamins, and minerals for brain function',
+        preparation:
+          'Cook teff, roast vegetables, add fresh avocado and grapefruit',
+      },
+    ];
+  };
+
+  const parseAIResponse = (response: string): Combination[] => {
+    const combinations: Combination[] = [];
+
+    try {
+      // Try to find structured combinations first
+      const combinationRegex =
+        /COMBINATION\s+\d+\s*\([^)]+\):([\s\S]*?)(?=COMBINATION\s+\d+\s*\([^)]+\):|$)/gi;
+      const matches = response.match(combinationRegex);
+
+      if (matches && matches.length > 0) {
+        // Parse structured format
+        matches.forEach(match => {
+          const combination: Combination = {};
+          const lines = match
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line);
+
+          lines.forEach(line => {
+            if (line.toLowerCase().includes('name:')) {
+              combination.name = line.replace(/.*name:\s*/i, '').trim();
+            } else if (line.toLowerCase().includes('fruit')) {
+              combination.fruits = line.replace(/.*?:/i, '').trim();
+            } else if (line.toLowerCase().includes('vegetable')) {
+              combination.vegetables = line.replace(/.*?:/i, '').trim();
+            } else if (line.toLowerCase().includes('grain')) {
+              combination.grain = line.replace(/.*?:/i, '').trim();
+            } else if (line.toLowerCase().includes('benefit')) {
+              combination.benefits = line.replace(/.*?:/i, '').trim();
+            } else if (
+              line.toLowerCase().includes('preparation') ||
+              line.toLowerCase().includes('recipe')
+            ) {
+              combination.preparation = line.replace(/.*?:/i, '').trim();
+            }
+          });
+
+          if (
+            combination.fruits ||
+            combination.vegetables ||
+            combination.grain
+          ) {
+            combinations.push(combination);
+          }
+        });
+      } else {
+        // Fallback: try to parse any structured format
+        const sections = response.split(/\n\n|\r\n\r\n/);
+
+        sections.forEach(section => {
+          if (section.trim()) {
+            const lines = section
+              .split('\n')
+              .map(line => line.trim())
+              .filter(line => line);
+
+            if (lines.length > 0) {
+              const combination: Combination = {};
+
+              lines.forEach(line => {
+                if (line.toLowerCase().includes('name:')) {
+                  combination.name = line.replace(/.*name:\s*/i, '').trim();
+                } else if (line.toLowerCase().includes('fruit')) {
+                  combination.fruits = line.replace(/.*?:/i, '').trim();
+                } else if (line.toLowerCase().includes('vegetable')) {
+                  combination.vegetables = line.replace(/.*?:/i, '').trim();
+                } else if (line.toLowerCase().includes('grain')) {
+                  combination.grain = line.replace(/.*?:/i, '').trim();
+                } else if (line.toLowerCase().includes('benefit')) {
+                  combination.benefits = line.replace(/.*?:/i, '').trim();
+                } else if (
+                  line.toLowerCase().includes('preparation') ||
+                  line.toLowerCase().includes('recipe')
+                ) {
+                  combination.preparation = line.replace(/.*?:/i, '').trim();
+                }
+              });
+
+              if (
+                combination.fruits ||
+                combination.vegetables ||
+                combination.grain
+              ) {
+                combinations.push(combination);
+              }
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error parsing AI response:', error);
+    }
+
+    return combinations;
+  };
+
+  const dietaryRestrictionOptions = [
+    'Vegetarian',
+    'Vegan',
+    'Gluten-Free',
+    'Dairy-Free',
+    'Low-Carb',
+    'Keto',
+    'Paleo',
+    'Mediterranean',
+  ];
+
   return (
-    <ErrorBoundary>
-      <div className="max-w-6xl mx-auto space-y-8" data-tour="planner-main">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground mb-4">
-            Superhuman Nutrition
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover unique fruit-vegetable-grain combinations for optimal
-            health
-          </p>
-        </div>
+    <motion.div
+      className="space-y-8"
+      variants={staggerContainer}
+      initial="initial"
+      animate="animate"
+      data-tour="planner-main"
+    >
+      {/* Quick Stats */}
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        variants={fadeInUp}
+      >
+        <AnimatedCard className="text-center p-4">
+          <Apple className="w-6 h-6 text-red-500 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-foreground">
+            {fruits.length}
+          </div>
+          <div className="text-sm text-muted-foreground">Fruits</div>
+        </AnimatedCard>
 
-        {/* Fallback Data Notice */}
-        {usingFallbackData && (
-          <Card className="bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
-                <Database className="w-5 h-5" />
-                <p className="text-sm font-medium">
-                  Using Fallback Data - Firebase not configured
-                </p>
+        <AnimatedCard className="text-center p-4">
+          <Carrot className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-foreground">
+            {vegetables.length}
+          </div>
+          <div className="text-sm text-muted-foreground">Vegetables</div>
+        </AnimatedCard>
+
+        <AnimatedCard className="text-center p-4">
+          <Wheat className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-foreground">
+            {grains.length}
+          </div>
+          <div className="text-sm text-muted-foreground">Grains</div>
+        </AnimatedCard>
+
+        <AnimatedCard className="text-center p-4">
+          <Star className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+          <div className="text-2xl font-bold text-foreground">
+            {parsedCombinations.length}
+          </div>
+          <div className="text-sm text-muted-foreground">Combinations</div>
+        </AnimatedCard>
+      </motion.div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Column - Food Selection */}
+        <motion.div className="space-y-6" variants={fadeInUp}>
+          <ElevatedCard data-tour="food-selection">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Target className="w-5 h-5 text-blue-600" />
+                  Food Selection
+                </h2>
+                <AnimatedButton
+                  onClick={resetAll}
+                  variant="outline"
+                  size="sm"
+                  icon={<RefreshCw className="w-4 h-4" />}
+                >
+                  Reset All
+                </AnimatedButton>
               </div>
-              <p className="text-yellow-700 dark:text-yellow-300 text-sm mt-2">
-                The application is currently using sample food data because
-                Firebase is not configured. To access the full food database,
-                please configure your Firebase environment variables.
-              </p>
-            </CardContent>
-          </Card>
-        )}
 
-        {/* Database Browser Section */}
-        <Card data-tour="food-database">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Database className="w-5 h-5" />
-                Food Database Browser ({allFoodGroups.length} foods available)
-                {usingFallbackData && (
-                  <span className="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
-                    Fallback Mode
-                  </span>
+              <div className="space-y-6">
+                <FoodSelector
+                  title="Fruits"
+                  items={fruits}
+                  newItem={newFruit}
+                  setNewItem={setNewFruit}
+                  onAdd={() => addFoodItem('fruits', newFruit, setFruits)}
+                  onRemove={item => removeFoodItem('fruits', item)}
+                  onClear={() => setFruits([])}
+                  suggestions={[
+                    'Apple',
+                    'Banana',
+                    'Orange',
+                    'Strawberry',
+                    'Blueberry',
+                  ]}
+                  icon={<Apple className="w-4 h-4 text-white" />}
+                  color="bg-red-500"
+                />
+
+                <FoodSelector
+                  title="Vegetables"
+                  items={vegetables}
+                  newItem={newVegetable}
+                  setNewItem={setNewVegetable}
+                  onAdd={() =>
+                    addFoodItem('vegetables', newVegetable, setVegetables)
+                  }
+                  onRemove={item => removeFoodItem('vegetables', item)}
+                  onClear={() => setVegetables([])}
+                  suggestions={[
+                    'Spinach',
+                    'Kale',
+                    'Broccoli',
+                    'Carrot',
+                    'Tomato',
+                  ]}
+                  icon={<Carrot className="w-4 h-4 text-white" />}
+                  color="bg-green-500"
+                />
+
+                <FoodSelector
+                  title="Grains"
+                  items={grains}
+                  newItem={newGrain}
+                  setNewItem={setNewGrain}
+                  onAdd={() => addFoodItem('grains', newGrain, setGrains)}
+                  onRemove={item => removeFoodItem('grains', item)}
+                  onClear={() => setGrains([])}
+                  suggestions={[
+                    'Quinoa',
+                    'Brown Rice',
+                    'Oats',
+                    'Barley',
+                    'Millet',
+                  ]}
+                  icon={<Wheat className="w-4 h-4 text-white" />}
+                  color="bg-yellow-500"
+                />
+              </div>
+            </div>
+          </ElevatedCard>
+
+          {/* Preferences Section */}
+          <ElevatedCard data-tour="nutrition-goals">
+            <div className="p-6">
+              <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+                <Target className="w-5 h-5 text-purple-600" />
+                Your Goals & Preferences
+              </h2>
+
+              <div className="space-y-4">
+                <div data-tour="user-prompt">
+                  <Label className="text-sm font-medium text-foreground mb-2 block">
+                    Describe your nutrition goal
+                  </Label>
+                  <Textarea
+                    value={userPrompt}
+                    onChange={e => setUserPrompt(e.target.value)}
+                    placeholder="e.g., I want to build muscle, lose weight, improve energy, or create a balanced meal plan..."
+                    className="min-h-[80px]"
+                  />
+                </div>
+
+                <div data-tour="additional-preferences">
+                  <Label className="text-sm font-medium text-foreground mb-2 block">
+                    Additional preferences
+                  </Label>
+                  <Textarea
+                    value={preferences}
+                    onChange={e => setPreferences(e.target.value)}
+                    placeholder="e.g., I prefer quick recipes, love spicy food, want high protein meals..."
+                    className="min-h-[80px]"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-foreground mb-2 block">
+                    Dietary Restrictions
+                  </Label>
+                  <div className="flex flex-wrap gap-2">
+                    {dietaryRestrictionOptions.map(restriction => (
+                      <motion.button
+                        key={restriction}
+                        onClick={() => toggleDietaryRestriction(restriction)}
+                        className={`px-3 py-1 rounded-full text-sm border transition-all ${
+                          dietaryRestrictions.includes(restriction)
+                            ? 'bg-blue-500 text-white border-blue-500'
+                            : 'border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {restriction}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ElevatedCard>
+        </motion.div>
+
+        {/* Right Column - Results */}
+        <motion.div className="space-y-6" variants={fadeInUp}>
+          {/* Generate Button */}
+          <ElevatedCard data-tour="generate-button">
+            <div className="p-6">
+              <div className="text-center">
+                <GradientButton
+                  onClick={handleGenerateMealPlan}
+                  loading={loading}
+                  size="lg"
+                  icon={<Sparkles className="w-5 h-5" />}
+                  iconPosition="left"
+                  className="w-full"
+                  disabled={
+                    fruits.length === 0 &&
+                    vegetables.length === 0 &&
+                    grains.length === 0 &&
+                    !userPrompt.trim()
+                  }
+                >
+                  {loading
+                    ? 'Generating Your Meal Plan...'
+                    : 'Generate AI Meal Plan'}
+                </GradientButton>
+
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm"
+                  >
+                    {error}
+                  </motion.div>
                 )}
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowDatabase(!showDatabase)}
+            </div>
+          </ElevatedCard>
+
+          {/* Results */}
+          <AnimatePresence>
+            {parsedCombinations.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-4"
               >
-                {showDatabase ? 'Hide Database' : 'Show Database'}
-              </Button>
-            </CardTitle>
-          </CardHeader>
-
-          {showDatabase && (
-            <CardContent className="space-y-6">
-              {/* Search Database */}
-              <div className="mb-4">
-                <Input
-                  placeholder="Search foods in database..."
-                  className="max-w-md"
-                  onChange={e => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    if (searchTerm) {
-                      const filtered = allFoodGroups.filter(
-                        food =>
-                          food.name.toLowerCase().includes(searchTerm) ||
-                          food.category.toLowerCase().includes(searchTerm) ||
-                          (food.benefits &&
-                            food.benefits.some(benefit =>
-                              benefit.toLowerCase().includes(searchTerm)
-                            ))
-                      );
-                      setCategorizedFoods({
-                        fruits: filtered.filter(f =>
-                          f.category?.toLowerCase().includes('fruit')
-                        ),
-                        vegetables: filtered.filter(f =>
-                          f.category?.toLowerCase().includes('vegetable')
-                        ),
-                        grains: filtered.filter(
-                          f =>
-                            f.category?.toLowerCase().includes('grain') ||
-                            f.category?.toLowerCase().includes('cereal') ||
-                            f.category?.toLowerCase().includes('carbohydrate')
-                        ),
-                      });
-                    } else {
-                      // Reset to original categorization
-                      const categorized = {
-                        fruits: allFoodGroups.filter(f =>
-                          f.category?.toLowerCase().includes('fruit')
-                        ),
-                        vegetables: allFoodGroups.filter(f =>
-                          f.category?.toLowerCase().includes('vegetable')
-                        ),
-                        grains: allFoodGroups.filter(
-                          f =>
-                            f.category?.toLowerCase().includes('grain') ||
-                            f.category?.toLowerCase().includes('cereal') ||
-                            f.category?.toLowerCase().includes('carbohydrate')
-                        ),
-                      };
-                      setCategorizedFoods(categorized);
-                    }
-                  }}
-                />
-              </div>
-
-              {dbLoading && (
-                <div className="text-center py-4">
-                  <Loader2 className="w-6 h-6 animate-spin text-blue-600 mx-auto mb-2" />
-                  <p className="text-muted-foreground">
-                    Loading food database...
-                  </p>
-                </div>
-              )}
-
-              {dbError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <p className="text-red-700 dark:text-red-300">
-                    Database error: {dbError}
-                  </p>
-                </div>
-              )}
-
-              {!dbLoading && !dbError && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Fruits Category */}
-                  <div className="space-y-3">
-                    <div
-                      className="flex items-center justify-between cursor-pointer p-3 bg-muted rounded-lg hover:bg-accent"
-                      onClick={() => toggleCategory('fruits')}
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    Your AI-Generated Combinations
+                  </h2>
+                  <div className="flex gap-2">
+                    <AnimatedButton
+                      variant="outline"
+                      size="sm"
+                      icon={<Save className="w-4 h-4" />}
                     >
-                      <h3 className="font-medium text-foreground">
-                        Fruits ({categorizedFoods.fruits.length})
-                      </h3>
-                      {expandedCategories.fruits ? (
-                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                      )}
-                    </div>
-
-                    {expandedCategories.fruits && (
-                      <div className="max-h-60 overflow-y-auto space-y-2">
-                        {categorizedFoods.fruits.length === 0 ? (
-                          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                            <p className="text-yellow-700 dark:text-yellow-300 text-sm">
-                              No fruits found in database
-                            </p>
-                          </div>
-                        ) : (
-                          categorizedFoods.fruits.map(food => {
-                            return (
-                              <div
-                                key={food.id || food.name}
-                                className="p-3 bg-card border border-border rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                              >
-                                <div className="font-medium text-sm text-foreground">
-                                  {food.name || 'Unknown Name'}
-                                </div>
-                                <div className="text-xs text-muted-foreground mt-1">
-                                  {food.benefits?.join(', ') ||
-                                    'No description'}
-                                </div>
-                                <div className="text-xs text-muted-foreground/80 mt-1">
-                                  {food.caloriesPer100g || 0} cal,{' '}
-                                  {food.proteinPer100g || 0}g protein
-                                </div>
-                                <div className="text-xs text-muted-foreground/60 mt-1">
-                                  Category: {food.category || 'Unknown'}
-                                </div>
-                                <div className="mt-2">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() =>
-                                      addFoodItem(
-                                        'fruits',
-                                        food.name,
-                                        setFruits
-                                      )
-                                    }
-                                    disabled={fruits.includes(food.name)}
-                                    className="w-full text-xs"
-                                  >
-                                    {fruits.includes(food.name)
-                                      ? 'Added'
-                                      : 'Add to Fruits'}
-                                  </Button>
-                                </div>
-                              </div>
-                            );
-                          })
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Vegetables Category */}
-                  <div className="space-y-3">
-                    <div
-                      className="flex items-center justify-between cursor-pointer p-3 bg-muted rounded-lg hover:bg-accent"
-                      onClick={() => toggleCategory('vegetables')}
+                      Save
+                    </AnimatedButton>
+                    <AnimatedButton
+                      variant="outline"
+                      size="sm"
+                      icon={<Share2 className="w-4 h-4" />}
                     >
-                      <h3 className="font-medium text-foreground">
-                        Vegetables ({categorizedFoods.vegetables.length})
-                      </h3>
-                      {expandedCategories.vegetables ? (
-                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                      )}
-                    </div>
-
-                    {expandedCategories.vegetables && (
-                      <div className="max-h-60 overflow-y-auto space-y-2">
-                        {categorizedFoods.vegetables.length === 0 ? (
-                          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                            <p className="text-yellow-700 text-sm">
-                              No vegetables found in database
-                            </p>
-                          </div>
-                        ) : (
-                          categorizedFoods.vegetables.map(food => {
-                            return (
-                              <div
-                                key={food.id || food.name}
-                                className="p-3 bg-card border border-border rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                              >
-                                <div className="font-medium text-sm text-foreground">
-                                  {food.name || 'Unknown Name'}
-                                </div>
-                                <div className="text-xs text-muted-foreground mt-1">
-                                  {food.benefits?.join(', ') ||
-                                    'No description'}
-                                </div>
-                                <div className="text-xs text-muted-foreground/80 mt-1">
-                                  {food.caloriesPer100g || 0} cal,{' '}
-                                  {food.proteinPer100g || 0}g protein
-                                </div>
-                                <div className="text-xs text-muted-foreground/60 mt-1">
-                                  Category: {food.category || 'Unknown'}
-                                </div>
-                                <div className="mt-2">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() =>
-                                      addFoodItem(
-                                        'vegetables',
-                                        food.name,
-                                        setVegetables
-                                      )
-                                    }
-                                    disabled={vegetables.includes(food.name)}
-                                    className="w-full text-xs"
-                                  >
-                                    {vegetables.includes(food.name)
-                                      ? 'Added'
-                                      : 'Add to Vegetables'}
-                                  </Button>
-                                </div>
-                              </div>
-                            );
-                          })
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Grains Category */}
-                  <div className="space-y-3">
-                    <div
-                      className="flex items-center justify-between cursor-pointer p-3 bg-muted rounded-lg hover:bg-accent"
-                      onClick={() => toggleCategory('grains')}
-                    >
-                      <h3 className="font-medium text-foreground">
-                        Grains ({categorizedFoods.grains.length})
-                      </h3>
-                      {expandedCategories.grains ? (
-                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                      )}
-                    </div>
-
-                    {expandedCategories.grains && (
-                      <div className="max-h-60 overflow-y-auto space-y-2">
-                        {categorizedFoods.grains.length === 0 ? (
-                          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                            <p className="text-yellow-700 text-sm">
-                              No grains found in database
-                            </p>
-                          </div>
-                        ) : (
-                          categorizedFoods.grains.map(food => {
-                            return (
-                              <div
-                                key={food.id || food.name}
-                                className="p-3 bg-card border border-border rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                              >
-                                <div className="font-medium text-sm text-foreground">
-                                  {food.name || 'Unknown Name'}
-                                </div>
-                                <div className="text-xs text-muted-foreground mt-1">
-                                  {food.benefits?.join(', ') ||
-                                    'No description'}
-                                </div>
-                                <div className="text-xs text-muted-foreground/80 mt-1">
-                                  {food.caloriesPer100g || 0} cal,{' '}
-                                  {food.proteinPer100g || 0}g protein
-                                </div>
-                                <div className="text-xs text-muted-foreground/60 mt-1">
-                                  Category: {food.category || 'Unknown'}
-                                </div>
-                                <div className="mt-2">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() =>
-                                      addFoodItem(
-                                        'grains',
-                                        food.name,
-                                        setGrains
-                                      )
-                                    }
-                                    disabled={grains.includes(food.name)}
-                                    className="w-full text-xs"
-                                  >
-                                    {grains.includes(food.name)
-                                      ? 'Added'
-                                      : 'Add to Grains'}
-                                  </Button>
-                                </div>
-                              </div>
-                            );
-                          })
-                        )}
-                      </div>
-                    )}
+                      Share
+                    </AnimatedButton>
                   </div>
                 </div>
-              )}
-            </CardContent>
-          )}
-        </Card>
 
-        {/* Meal Planning Interface */}
-        <Card
-          className="bg-card border-border shadow-lg"
-          data-tour="user-prompt"
-        >
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="w-5 h-5" />
-              Create Your Meal Plan
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Food Selection */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <FoodSelector
-                title="Fruits"
-                items={fruits}
-                newItem={newFruit}
-                setNewItem={setNewFruit}
-                onAdd={() => addFoodItem('fruits', newFruit, setFruits)}
-                onRemove={item => removeFoodItem('fruits', item)}
-                suggestions={[
-                  'Apple',
-                  'Banana',
-                  'Orange',
-                  'Strawberry',
-                  'Blueberry',
-                  'Mango',
-                  'Pineapple',
-                  'Grape',
-                  'Peach',
-                  'Pear',
-                ]}
-                onClear={() => setFruits([])}
-              />
-
-              <FoodSelector
-                title="Vegetables"
-                items={vegetables}
-                newItem={newVegetable}
-                setNewItem={setNewVegetable}
-                onAdd={() =>
-                  addFoodItem('vegetables', newVegetable, setVegetables)
-                }
-                onRemove={item => removeFoodItem('vegetables', item)}
-                suggestions={[
-                  'Spinach',
-                  'Kale',
-                  'Broccoli',
-                  'Carrot',
-                  'Bell Pepper',
-                  'Tomato',
-                  'Cucumber',
-                  'Onion',
-                  'Garlic',
-                  'Sweet Potato',
-                ]}
-                onClear={() => setVegetables([])}
-              />
-
-              <FoodSelector
-                title="Grains"
-                items={grains}
-                newItem={newGrain}
-                setNewItem={setNewGrain}
-                onAdd={() => addFoodItem('grains', newGrain, setGrains)}
-                onRemove={item => removeFoodItem('grains', item)}
-                suggestions={[
-                  'Quinoa',
-                  'Brown Rice',
-                  'Oats',
-                  'Whole Wheat Bread',
-                  'Barley',
-                  'Millet',
-                  'Buckwheat',
-                  'Farro',
-                  'Amaranth',
-                  'Teff',
-                ]}
-                onClear={() => setGrains([])}
-              />
-            </div>
-
-            {/* User Preferences */}
-            <div className="space-y-4">
-              <div data-tour="nutrition-goals">
-                <Label
-                  htmlFor="userPrompt"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Nutrition Goal or Preference
-                </Label>
-                <Textarea
-                  id="userPrompt"
-                  value={userPrompt}
-                  onChange={e => setUserPrompt(e.target.value)}
-                  placeholder="e.g., High protein for muscle building, low carb for weight loss, anti-inflammatory foods..."
-                  className="mt-1"
-                  rows={3}
-                />
-              </div>
-
-              <div data-tour="additional-preferences">
-                <Label
-                  htmlFor="preferences"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Additional Preferences
-                </Label>
-                <Textarea
-                  id="preferences"
-                  value={preferences}
-                  onChange={e => setPreferences(e.target.value)}
-                  placeholder="e.g., Quick preparation, budget-friendly, seasonal ingredients..."
-                  className="mt-1"
-                  rows={2}
-                />
-              </div>
-
-              {/* Dietary Restrictions */}
-              <div>
-                <Label className="text-sm font-medium text-foreground mb-2 block">
-                  Dietary Restrictions
-                </Label>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    'Vegetarian',
-                    'Vegan',
-                    'Gluten-Free',
-                    'Dairy-Free',
-                    'Low-Sodium',
-                    'Low-Sugar',
-                    'Keto',
-                    'Paleo',
-                  ].map(restriction => (
-                    <Badge
-                      key={restriction}
-                      variant={
-                        dietaryRestrictions.includes(restriction)
-                          ? 'default'
-                          : 'outline'
-                      }
-                      className={`cursor-pointer ${
-                        dietaryRestrictions.includes(restriction)
-                          ? 'bg-primary text-primary-foreground'
-                          : 'hover:bg-accent'
-                      }`}
-                      onClick={() => toggleDietaryRestriction(restriction)}
-                    >
-                      {restriction}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Generate Button */}
-            <div className="text-center">
-              <Button
-                onClick={handleGenerateMealPlan}
-                disabled={loading}
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3"
-                data-tour="generate-button"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Generating Meal Plan...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Generate AI Meal Plan
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                onClick={clearAllFoods}
-                variant="outline"
-                size="sm"
-                disabled={
-                  fruits.length === 0 &&
-                  vegetables.length === 0 &&
-                  grains.length === 0
-                }
-                className="text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-300 dark:hover:border-red-700"
-              >
-                Clear All Foods
-              </Button>
-
-              <Button
-                onClick={clearAllPreferences}
-                variant="outline"
-                size="sm"
-                disabled={
-                  !userPrompt.trim() &&
-                  !preferences.trim() &&
-                  dietaryRestrictions.length === 0
-                }
-                className="text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-800 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:border-orange-300 dark:hover:border-orange-700"
-              >
-                Clear Preferences
-              </Button>
-
-              <Button
-                onClick={resetAll}
-                variant="outline"
-                size="sm"
-                disabled={
-                  fruits.length === 0 &&
-                  vegetables.length === 0 &&
-                  grains.length === 0 &&
-                  !userPrompt.trim() &&
-                  !preferences.trim() &&
-                  dietaryRestrictions.length === 0
-                }
-                className="text-muted-foreground border-border hover:bg-accent hover:border-border/80"
-              >
-                Reset Everything
-              </Button>
-            </div>
-
-            {/* Error Display */}
-            {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                <p className="text-red-700 dark:text-red-300">{error}</p>
-              </div>
+                <CombinationDisplay combinations={parsedCombinations} />
+              </motion.div>
             )}
-          </CardContent>
-        </Card>
-
-        {/* Generated Combinations */}
-        {parsedCombinations.length > 0 && (
-          <CombinationDisplay
-            combinations={parsedCombinations}
-            onRegenerate={handleGenerateMealPlan}
-          />
-        )}
-
-        {mealPlan && parsedCombinations.length === 0 && (
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">
-                AI Generated Response
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-muted p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">
-                  Raw AI Response (Parsing failed):
-                </p>
-                <pre className="text-sm text-foreground whitespace-pre-wrap overflow-auto max-h-96">
-                  {mealPlan}
-                </pre>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+          </AnimatePresence>
+        </motion.div>
       </div>
-    </ErrorBoundary>
+    </motion.div>
   );
 }

@@ -60,10 +60,10 @@ export const DietaryRestrictionSchema = z.enum([
   'Vegan',
   'Gluten-Free',
   'Dairy-Free',
-  'Low-Sodium',
-  'Low-Sugar',
+  'Low-Carb',
   'Keto',
   'Paleo',
+  'Mediterranean',
 ]);
 
 export const UserPreferencesSchema = z.object({
@@ -79,11 +79,11 @@ export const UserPreferencesSchema = z.object({
 
 // Meal planning schemas
 export const MealPlanRequestSchema = z.object({
-  fruits: z.array(BaseStringSchema.max(100)).max(20),
-  vegetables: z.array(BaseStringSchema.max(100)).max(20),
-  grains: z.array(BaseStringSchema.max(100)).max(20),
-  userPrompt: BaseStringSchema.max(500).optional(),
-  preferences: BaseStringSchema.max(1000).optional(),
+  fruits: z.array(z.string().min(1).max(100)).max(20),
+  vegetables: z.array(z.string().min(1).max(100)).max(20),
+  grains: z.array(z.string().min(1).max(100)).max(20),
+  userPrompt: z.string().min(1).max(500).optional(),
+  preferences: z.string().min(1).max(1000).optional(),
   dietaryRestrictions: z.array(DietaryRestrictionSchema).max(10).optional(),
 });
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { AnimatedButton } from '@/components/ui/animated-button';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Sun, Moon, Monitor } from 'lucide-react';
 
@@ -37,7 +37,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button
+    <AnimatedButton
       variant="ghost"
       size="sm"
       onClick={cycleTheme}
@@ -48,7 +48,7 @@ export function ThemeToggle() {
     >
       {getIcon()}
       <span className="hidden sm:inline text-sm">{getLabel()}</span>
-    </Button>
+    </AnimatedButton>
   );
 }
 
@@ -77,15 +77,15 @@ export function ThemeToggleCompact() {
   };
 
   return (
-    <Button
+    <AnimatedButton
       variant="ghost"
-      size="icon"
+      size="sm"
       onClick={cycleTheme}
-      className="text-muted-foreground hover:text-foreground"
+      className="text-muted-foreground hover:text-foreground w-10 h-10 p-0"
       title={`Current theme: ${theme === 'system' ? `System (${resolvedTheme})` : theme}. Click to cycle through themes.`}
       aria-label={`Switch theme. Current: ${theme === 'system' ? `System (${resolvedTheme})` : theme}`}
     >
       {getIcon()}
-    </Button>
+    </AnimatedButton>
   );
 }
